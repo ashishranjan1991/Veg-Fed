@@ -10,6 +10,8 @@ export const translations = {
     schemes: "Schemes",
     advisories: "Advisories",
     reports: "Reports & Analytics",
+    projects: "Project Management",
+    marketing: "Marketing & E-Comm",
     logout: "Logout",
     switchTier: "Switch Tier (Demo)",
     welcome: "Welcome",
@@ -73,7 +75,11 @@ export const translations = {
     message: "Message",
     submitFeedback: "Submit Feedback",
     feedbackSuccess: "Your ticket has been raised successfully. Our team will contact you soon.",
-    tickets: "Support Tickets"
+    tickets: "Support Tickets",
+    projectTracking: "Infrastructure Progress",
+    ecommSales: "Direct Sales Portal",
+    traceability: "Batch Traceability (QR)",
+    registerFarmer: "New Farmer Enrolment"
   },
   hi: {
     dashboard: "डैशबोर्ड",
@@ -85,6 +91,8 @@ export const translations = {
     schemes: "योजनाएं",
     advisories: "परामर्श",
     reports: "रिपोर्ट और विश्लेषण",
+    projects: "परियोजना प्रबंधन",
+    marketing: "विपणन एवं ई-कॉमर्स",
     logout: "लॉगआउट",
     switchTier: "टियर बदलें (डेमो)",
     welcome: "स्वागत है",
@@ -97,7 +105,7 @@ export const translations = {
     welcomeBack: "वापसी पर स्वागत है",
     selectRole: "जारी रखने के लिए अपनी भूमिका चुनें",
     userId: "यूजर आईडी / मोबाइल",
-    password: "पासवर्ड / पिन",
+    password: "password / PIN",
     loginButton: "पोर्टल पर लॉगिन करें",
     dbtNumber: "DBT पंजीकरण आईडी",
     startRegistration: "पंजीकरण शुरू करें",
@@ -148,7 +156,11 @@ export const translations = {
     message: "संदेश",
     submitFeedback: "प्रतिक्रिया भेजें",
     feedbackSuccess: "आपका टिकट सफलतापूर्वक दर्ज कर लिया गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।",
-    tickets: "सहायता टिकट"
+    tickets: "सहायता टिकट",
+    projectTracking: "बुनियादी ढांचा प्रगति",
+    ecommSales: "सीधी बिक्री पोर्टल",
+    traceability: "बैच ट्रैसेबिलिटी (QR)",
+    registerFarmer: "नया किसान नामांकन"
   }
 };
 

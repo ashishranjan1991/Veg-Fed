@@ -7,8 +7,11 @@ interface FarmerModuleProps {
 }
 
 const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
-  const [view, setView] = useState<'list' | 'details' | 'self'>(role === UserRole.FARMER ? 'self' : 'list');
-  const [selectedFarmer, setSelectedFarmer] = useState<FarmerRegistration | null>(null);
+  const [view, setView] = useState<'list' | 'details' | 'self' | 'register'>(role === UserRole.FARMER ? 'self' : 'list');
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState<Partial<FarmerRegistration>>({
+    firstName: '', lastName: '', mobile: '', dbtNumber: '', bankName: '', accountNumber: '', crops: []
+  });
 
   const [farmers] = useState<FarmerRegistration[]>([
     { 
@@ -19,6 +22,134 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
       documents: [{ type: 'Aadhaar Card', status: 'Verified' }]
     }
   ]);
+
+  const renderRegistrationWizard = () => (
+    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-500">
+      <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-gray-100 dark:border-slate-800 shadow-2xl relative overflow-hidden">
+        {/* Progress Bar */}
+        <div className="flex items-center justify-between mb-12">
+          {[1, 2, 3, 4].map((s) => (
+            <div key={s} className="flex flex-col items-center relative z-10">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all ${
+                step === s ? 'bg-emerald-600 text-white shadow-xl scale-110' : 
+                step > s ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
+              }`}>
+                {step > s ? <i className="fa-solid fa-check"></i> : s}
+              </div>
+              <span className={`text-[10px] font-black uppercase mt-3 tracking-widest ${step === s ? 'text-emerald-600' : 'text-gray-400'}`}>
+                {s === 1 ? 'Initiation' : s === 2 ? 'Personal' : s === 3 ? 'Farm Data' : 'Finish'}
+              </span>
+            </div>
+          ))}
+          <div className="absolute top-[4.5rem] left-20 right-20 h-1 bg-gray-50 dark:bg-slate-800 -z-0">
+             <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: `${((step-1)/3)*100}%` }}></div>
+          </div>
+        </div>
+
+        {step === 1 && (
+          <div className="space-y-8 animate-in fade-in duration-300">
+            <div>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Step 1: DBT Initiation</h3>
+              <p className="text-gray-500 text-sm mt-1">Verification against Government of Bihar Agriculture DBT Records</p>
+            </div>
+            <div className="space-y-4">
+               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Aadhaar Linked DBT Number</label>
+               <div className="flex space-x-3">
+                 <input 
+                   type="text" 
+                   placeholder="e.g. 231XXXXXXXX" 
+                   className="flex-1 bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-2xl px-6 py-4 font-black outline-none focus:ring-4 focus:ring-emerald-500/20 dark:text-white"
+                 />
+                 <button onClick={() => setStep(2)} className="bg-emerald-600 text-white px-8 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700">Verify OTP</button>
+               </div>
+               <p className="text-xs text-emerald-600 font-bold"><i className="fa-solid fa-circle-info mr-2"></i> SMS OTP will be sent to registered mobile ending in ••••54</p>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-8 animate-in fade-in duration-300">
+            <div>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Step 2: Personal & Banking</h3>
+              <p className="text-gray-500 text-sm mt-1">Complete your legal profile for membership</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">First Name</label>
+                 <input type="text" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 font-bold dark:text-white" />
+               </div>
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Bank Name</label>
+                 <select className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 font-bold dark:text-white">
+                   <option>State Bank of India</option>
+                   <option>Bihar Gramin Bank</option>
+                   <option>Punjab National Bank</option>
+                 </select>
+               </div>
+               <div className="md:col-span-2 space-y-2">
+                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Account Number (Confirming with DBT)</label>
+                 <input type="text" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 font-bold dark:text-white" />
+               </div>
+            </div>
+            <div className="flex justify-between pt-8">
+               <button onClick={() => setStep(1)} className="text-gray-400 font-black text-xs uppercase tracking-widest">Back</button>
+               <button onClick={() => setStep(3)} className="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-emerald-700">Next Step</button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-8 animate-in fade-in duration-300">
+             <div>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Step 3: Farm Production Data</h3>
+              <p className="text-gray-500 text-sm mt-1">Specify your current crops and land holdings</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Primary Vegetable</label>
+                 <select className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 font-bold dark:text-white">
+                   <option>Tomato</option>
+                   <option>Potato</option>
+                   <option>Onion</option>
+                 </select>
+               </div>
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Area (Acres)</label>
+                 <input type="number" step="0.01" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 font-bold dark:text-white" />
+               </div>
+            </div>
+            <div className="p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 rounded-2xl flex items-center space-x-4">
+               <i className="fa-solid fa-camera text-2xl text-amber-600"></i>
+               <div>
+                  <p className="text-xs font-black text-amber-800 dark:text-amber-400 uppercase tracking-widest">Upload Land Receipt</p>
+                  <p className="text-[10px] text-amber-600/70 font-bold">LPC or Current Land Receipt is mandatory for high-value subsidy.</p>
+               </div>
+            </div>
+            <div className="flex justify-between pt-8">
+               <button onClick={() => setStep(2)} className="text-gray-400 font-black text-xs uppercase tracking-widest">Back</button>
+               <button onClick={() => setStep(4)} className="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-emerald-700">Submit Application</button>
+            </div>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div className="text-center py-10 space-y-8 animate-in zoom-in duration-500">
+             <div className="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner">
+                <i className="fa-solid fa-cloud-check"></i>
+             </div>
+             <div>
+                <h3 className="text-3xl font-black text-gray-900 dark:text-white">Submission Successful!</h3>
+                <p className="text-gray-500 font-medium mt-2">Your Application ID: <span className="font-black text-emerald-600">VEGFED-REG-2026-0442</span></p>
+             </div>
+             <p className="text-sm text-gray-400 max-w-md mx-auto">Your membership is now pending PVCS Chairman review. You will receive an SMS upon Level 2 approval.</p>
+             <button onClick={() => setView('self')} className="bg-slate-900 text-white px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Profile</button>
+          </div>
+        )}
+        
+        <i className="fa-solid fa-id-card absolute -bottom-10 -left-10 text-[200px] text-gray-50 dark:text-slate-800/30 -rotate-12 pointer-events-none"></i>
+      </div>
+    </div>
+  );
 
   const renderSelfView = () => (
     <div className="space-y-8 max-w-4xl mx-auto">
@@ -94,8 +225,10 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
           <h2 className="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Membership Registry</h2>
           <p className="text-gray-400 dark:text-slate-500 text-sm font-medium">Processing application queue for {role === UserRole.PVCS_USER ? 'Block' : 'State'}</p>
         </div>
+        {role === UserRole.PVCS_USER && (
+           <button onClick={() => {setView('register'); setStep(1);}} className="bg-emerald-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 transition-all">New Enrolment</button>
+        )}
       </div>
-      {/* Existing list view implementation goes here... simplified for focus */}
       <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden p-4">
          <table className="w-full text-left">
             <thead>
@@ -132,7 +265,7 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
     </div>
   );
 
-  return view === 'self' ? renderSelfView() : renderAdminView();
+  return view === 'register' ? renderRegistrationWizard() : (view === 'self' ? renderSelfView() : renderAdminView());
 };
 
 export default FarmerModule;

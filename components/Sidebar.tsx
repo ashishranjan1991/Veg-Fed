@@ -29,6 +29,8 @@ const Sidebar: React.FC<SidebarProps> = ({ role, activeTab, setActiveTab, onRole
     { id: 'land-crop', label: t.landCrops, icon: 'fa-map-location-dot', roles: [UserRole.PVCS_USER, UserRole.ADMIN, UserRole.FARMER] },
     { id: 'procurement', label: t.procurement, icon: 'fa-truck-field', roles: [UserRole.PVCS_USER, UserRole.UNION_USER, UserRole.ADMIN] },
     { id: 'quality', label: t.qualityCheck, icon: 'fa-microscope', roles: [UserRole.PVCS_USER, UserRole.UNION_USER, UserRole.ADMIN] },
+    { id: 'projects', label: t.projects, icon: 'fa-trowel-bricks', roles: [UserRole.UNION_USER, UserRole.ADMIN, UserRole.DEPT_OFFICIAL] },
+    { id: 'marketing', label: t.marketing, icon: 'fa-shop', roles: [UserRole.UNION_USER, UserRole.ADMIN] },
     { id: 'reports', label: t.reports, icon: 'fa-chart-pie', roles: [UserRole.PVCS_USER, UserRole.UNION_USER, UserRole.DEPT_OFFICIAL, UserRole.ADMIN] },
     { id: 'schemes', label: t.schemes, icon: 'fa-file-invoice', roles: Object.values(UserRole) },
     { id: 'advisory', label: t.advisories, icon: 'fa-bullhorn', roles: Object.values(UserRole) },

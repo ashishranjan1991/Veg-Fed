@@ -12,6 +12,8 @@ import AdvisoryModule from './components/AdvisoryModule';
 import LandCropModule from './components/LandCropModule';
 import MasterDataModule from './components/MasterDataModule';
 import ReportsModule from './components/ReportsModule';
+import ProjectManagementModule from './components/ProjectManagementModule';
+import MarketingECommerceModule from './components/MarketingECommerceModule';
 import Home from './components/Home';
 import { Language, FontSize } from './translations';
 
@@ -75,6 +77,10 @@ const App: React.FC = () => {
         return <ProcurementModule role={currentRole} language={language} />;
       case 'quality':
         return <QualityModule role={currentRole} language={language} />;
+      case 'projects':
+        return <ProjectManagementModule role={currentRole} />;
+      case 'marketing':
+        return <MarketingECommerceModule role={currentRole} />;
       case 'schemes':
         return <SchemeModule role={currentRole} />;
       case 'advisory':
