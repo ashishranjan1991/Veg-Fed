@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { UserRole } from '../types';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Cell, PieChart, Pie } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import { Language, translations } from '../translations';
 
 interface DashboardProps {
@@ -12,106 +12,112 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
   const t = translations[language];
   
-  // Mock data for visualizations
   const procurementData = [
-    { name: 'Mon', qty: 450 },
-    { name: 'Tue', qty: 620 },
-    { name: 'Wed', qty: 380 },
-    { name: 'Thu', qty: 540 },
-    { name: 'Fri', qty: 810 },
-    { name: 'Sat', qty: 700 },
-    { name: 'Sun', qty: 250 },
+    { name: 'Mon', qty: 450 }, { name: 'Tue', qty: 620 }, { name: 'Wed', qty: 380 },
+    { name: 'Thu', qty: 540 }, { name: 'Fri', qty: 810 }, { name: 'Sat', qty: 700 }, { name: 'Sun', qty: 250 },
   ];
 
-  const qualityGradeData = [
-    { name: 'Grade A', value: 400, color: '#10b981' },
-    { name: 'Grade B', value: 300, color: '#3b82f6' },
-    { name: 'Grade C', value: 200, color: '#f59e0b' },
-    { name: 'Grade D', value: 50, color: '#ef4444' },
-  ];
-
-  const StatCard = ({ title, value, icon, color }: { title: string, value: string, icon: string, color: string }) => (
-    <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors duration-300">
-      <div className={`w-12 h-12 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-2xl ${color}`}>
-        <i className={`fa-solid ${icon}`}></i>
+  const StatCard = ({ title, value, icon, color, trend }: { title: string, value: string, icon: string, color: string, trend?: string }) => (
+    <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
+      <div className="flex items-center justify-between mb-4">
+        <div className={`w-12 h-12 rounded-2xl bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-2xl ${color}`}>
+          <i className={`fa-solid ${icon}`}></i>
+        </div>
+        {trend && <span className="text-[10px] font-black px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg">{trend}</span>}
       </div>
       <div>
-        <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">{title}</p>
-        <p className="text-2xl font-bold text-gray-900 dark:text-slate-100 leading-none mt-1">{value}</p>
+        <p className="text-gray-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">{title}</p>
+        <p className="text-3xl font-black text-gray-900 dark:text-slate-100 mt-1">{value}</p>
       </div>
     </div>
   );
 
   const renderFarmerDash = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatCard title="Membership Status" value="Approved" icon="fa-check-circle" color="text-emerald-600" />
-        <StatCard title="Total Sales (Mtd)" value="₹ 45,200" icon="fa-wallet" color="text-blue-600" />
-        <StatCard title="Upcoming Harvest" value="15 Jan 2026" icon="fa-calendar" color="text-amber-600" />
+        <StatCard title="Membership Status" value="Verified" icon="fa-id-card-clip" color="text-emerald-600" trend="Active" />
+        <StatCard title="Total Earnings (Mtd)" value="₹ 45,200" icon="fa-indian-rupee-sign" color="text-blue-600" trend="+12%" />
+        <StatCard title="Plots Registered" value="2.5 Acres" icon="fa-mountain-sun" color="text-amber-600" />
       </div>
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
-        <h3 className="text-lg font-bold mb-4 dark:text-slate-100">Live Central Market Rates</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {['Tomato', 'Potato', 'Onion', 'Brinjal'].map(item => (
-            <div key={item} className="p-4 border border-gray-100 dark:border-slate-800 rounded-lg text-center bg-gray-50/50 dark:bg-slate-800/50">
-              <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">{item}</p>
-              <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">₹ 26.50</p>
-              <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-1 uppercase tracking-widest font-black">Central DB Rate</p>
-            </div>
-          ))}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm">
+           <h3 className="text-xl font-black mb-6 flex items-center dark:text-slate-100">
+             <i className="fa-solid fa-chart-line text-emerald-600 mr-3"></i>
+             Live Central Market Rates (Today)
+           </h3>
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {['Tomato', 'Potato', 'Onion', 'Brinjal'].map(item => (
+                <div key={item} className="p-6 border border-gray-50 dark:border-slate-800 rounded-3xl text-center bg-gray-50/50 dark:bg-slate-800/50 group hover:border-emerald-500 transition-all">
+                  <p className="text-gray-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{item}</p>
+                  <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">₹ 26.50</p>
+                  <p className="text-[8px] font-bold text-gray-400 mt-2 uppercase">Base Grade A</p>
+                </div>
+              ))}
+           </div>
+        </div>
+        <div className="bg-emerald-900 p-8 rounded-[2.5rem] text-white flex flex-col justify-between relative overflow-hidden">
+           <div className="relative z-10">
+             <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-2">Upcoming Task</p>
+             <h4 className="text-2xl font-black mb-4 leading-tight">Harvesting Alert: Tomato Batch A</h4>
+             <p className="text-sm text-emerald-100/70">Estimated harvest in 4 days. Contact local PVCS for collection schedule.</p>
+           </div>
+           <button className="relative z-10 mt-6 w-full py-3 bg-white text-emerald-900 rounded-xl font-black text-xs uppercase tracking-widest">Mark as Ready</button>
+           <i className="fa-solid fa-leaf absolute -bottom-10 -right-10 text-[180px] text-white/5 rotate-45"></i>
         </div>
       </div>
     </div>
   );
 
   const renderPVCSDash = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Registered Farmers" value="1,245" icon="fa-users" color="text-blue-600" />
-        <StatCard title="Today's Procurement" value="2.4 Tons" icon="fa-truck-field" color="text-emerald-600" />
-        <StatCard title="Pending Verifications" value="14" icon="fa-clock" color="text-amber-600" />
-        <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-sm flex items-center space-x-4">
-           <div className="w-12 h-12 rounded-lg bg-emerald-900/30 flex items-center justify-center text-2xl text-emerald-500">
+        <StatCard title="Procured Today" value="2.4 Tons" icon="fa-truck-ramp-box" color="text-blue-600" trend="On Target" />
+        <StatCard title="Active Farmers" value="1,245" icon="fa-people-group" color="text-emerald-600" />
+        <StatCard title="Quality Alerts" value="03" icon="fa-triangle-exclamation" color="text-amber-600" trend="Critical" />
+        <div className="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm flex items-center space-x-4">
+           <div className="w-12 h-12 rounded-2xl bg-emerald-900/30 flex items-center justify-center text-2xl text-emerald-500">
               <i className="fa-solid fa-server"></i>
            </div>
            <div>
-              <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">System Health</p>
-              <p className="text-sm font-bold text-emerald-400 leading-none mt-1">MySQL Online</p>
-              <p className="text-[9px] text-slate-600 mt-1">Sync: 1s ago</p>
+              <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest leading-none">MySQL Sync Status</p>
+              <p className="text-sm font-bold text-emerald-400 mt-1">Cloud Online</p>
            </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm h-80 transition-colors duration-300">
-          <h3 className="text-lg font-bold mb-4 dark:text-slate-100">Weekly Procurement (Kg)</h3>
-          <ResponsiveContainer width="100%" height="100%">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[400px]">
+          <h3 className="text-lg font-black mb-6 uppercase tracking-tight dark:text-slate-100">Weekly Local Collection (Kg)</h3>
+          <ResponsiveContainer width="100%" height="85%">
             <BarChart data={procurementData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.1} />
-              <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
+              <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} dy={10} />
+              <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#f1f5f9' }}
-                itemStyle={{ color: '#10b981' }}
+                contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px', color: '#f1f5f9' }}
+                cursor={{ fill: 'rgba(16, 185, 129, 0.05)' }}
               />
-              <Bar dataKey="qty" fill="#10b981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="qty" fill="#10b981" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
-          <h3 className="text-lg font-bold mb-4 dark:text-slate-100">Recent Transactions</h3>
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-black uppercase tracking-tight dark:text-slate-100">Live Queue (PVCS Center)</h3>
+            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase">Realtime</span>
+          </div>
           <div className="space-y-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg transition-colors">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded-full flex items-center justify-center font-bold text-xs">RM</div>
+            {['Ram Mehto', 'Sunil Jha', 'Anita Devi'].map((name, i) => (
+              <div key={i} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-slate-800/50 rounded-2xl border border-gray-50 dark:border-slate-800 group transition-all hover:translate-x-1">
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded-xl flex items-center justify-center font-black text-xs">#{1020 + i}</div>
                   <div>
-                    <p className="text-sm font-semibold dark:text-slate-200">Ram Mehto</p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400">Tomato • 120 Kg • Grade A</p>
+                    <p className="text-sm font-black dark:text-slate-200">{name}</p>
+                    <p className="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase">Tomato • Grade A • 45Kg</p>
                   </div>
                 </div>
-                <div className="text-right text-sm">
-                  <p className="font-bold dark:text-slate-100">₹ 2,940</p>
-                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 uppercase font-bold tracking-tight">Synced</p>
+                <div className="text-right">
+                  <p className="text-sm font-black text-gray-900 dark:text-slate-100">₹ {(Math.random() * 2000 + 1000).toFixed(0)}</p>
+                  <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-tight">Verified</p>
                 </div>
               </div>
             ))}
@@ -121,27 +127,86 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
     </div>
   );
 
+  const renderStateDash = () => (
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard title="State Total Vol" value="142.8 Tons" icon="fa-globe" color="text-indigo-600" trend="All Unions" />
+        <StatCard title="Scheme Utilization" value="₹ 4.2 Cr" icon="fa-landmark" color="text-emerald-600" trend="64%" />
+        <StatCard title="Active Unions" value="08 / 08" icon="fa-map-location-dot" color="text-blue-600" />
+        <StatCard title="Digital Farmer Base" value="48.5k" icon="fa-fingerprint" color="text-amber-600" trend="+400 today" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[450px]">
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-xl font-black uppercase tracking-tight dark:text-slate-100 text-gray-900">Regional Union Performance</h3>
+              <select className="bg-gray-50 dark:bg-slate-800 border-none rounded-xl text-xs font-bold p-3 outline-none">
+                <option>This Financial Year</option>
+                <option>Last Quarter</option>
+              </select>
+            </div>
+            <ResponsiveContainer width="100%" height="80%">
+              <BarChart data={[
+                { name: 'Patna', val: 1200 }, { name: 'Gaya', val: 950 }, { name: 'Muzaff.', val: 1400 },
+                { name: 'Purnia', val: 800 }, { name: 'Bhojpur', val: 1100 }, { name: 'Saran', val: 600 }
+              ]}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
+                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '16px', color: '#f1f5f9' }}
+                  cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
+                />
+                <Bar dataKey="val" fill="#3b82f6" radius={[12, 12, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+         </div>
+         <div className="bg-slate-900 p-10 rounded-[3rem] text-white flex flex-col justify-between">
+            <div className="space-y-6">
+              <h4 className="text-2xl font-black leading-tight">Master Price Control</h4>
+              <p className="text-sm text-slate-400 font-medium leading-relaxed">System-wide prices were last synchronized 4 hours ago. Next scheduled push to PVCS nodes at 08:00 AM IST.</p>
+              <div className="space-y-4">
+                 {['Tomato', 'Onion'].map(item => (
+                   <div key={item} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-slate-700/50">
+                     <span className="font-bold text-sm">{item}</span>
+                     <span className="text-emerald-400 font-black">₹ 26.50</span>
+                   </div>
+                 ))}
+              </div>
+            </div>
+            <button className="mt-8 bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all">Go to Price Master</button>
+         </div>
+      </div>
+    </div>
+  );
+
   const renderContent = () => {
     switch(role) {
       case UserRole.FARMER: return renderFarmerDash();
       case UserRole.PVCS_USER: return renderPVCSDash();
-      case UserRole.UNION_USER: return renderPVCSDash(); // Re-use for demo
-      case UserRole.DEPT_OFFICIAL: return renderPVCSDash(); // Re-use for demo
-      default: return renderPVCSDash();
+      case UserRole.ADMIN:
+      case UserRole.DEPT_OFFICIAL:
+      case UserRole.UNION_USER: return renderStateDash();
+      default: return renderFarmerDash();
     }
   };
 
   return (
-    <div className="animate-in fade-in duration-500">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+    <div className="animate-in fade-in duration-700">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">{t.dashboardOverview}</h2>
-          <p className="text-gray-500 dark:text-slate-400 text-sm">{t.realtimeStats}</p>
+          <h2 className="text-3xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tighter">
+            {role === UserRole.FARMER ? "Farmer Portal" : role === UserRole.PVCS_USER ? "PVCS Node Center" : "State Federation Control"}
+          </h2>
+          <p className="text-gray-400 dark:text-slate-500 text-sm font-medium mt-1">
+             Bihar State Vegetable Processing & Marketing Network
+          </p>
         </div>
-        <button className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-gray-700 dark:text-slate-300 px-4 py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 flex items-center space-x-2 transition-all">
-          <i className="fa-solid fa-download"></i>
-          <span>{t.exportReport}</span>
-        </button>
+        <div className="flex space-x-3">
+          <button className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 text-gray-500 dark:text-slate-400 px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 flex items-center space-x-2 transition-all">
+            <i className="fa-solid fa-download"></i>
+            <span>{t.exportReport}</span>
+          </button>
+        </div>
       </div>
       {renderContent()}
     </div>
