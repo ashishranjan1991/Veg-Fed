@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Bihar Vegetable ERP",
+  "description": "Integrated ERP System for Bihar State Vegetable Processing & Marketing Scheme. A 3-tier cooperative framework for Farmers, PVCS, and Union/State officials.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
