@@ -94,6 +94,20 @@ CREATE TABLE IF NOT EXISTS schemes (
     status ENUM('Active', 'Planned', 'Closed') DEFAULT 'Active'
 );
 
+-- 8. Feedback & Support Tickets
+CREATE TABLE IF NOT EXISTS feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    mobile VARCHAR(15) NOT NULL,
+    category ENUM('Technical', 'Pricing', 'Membership', 'Scheme', 'Other') DEFAULT 'Other',
+    message TEXT NOT NULL,
+    status ENUM('Open', 'In Progress', 'Resolved') DEFAULT 'Open',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    resolved_at TIMESTAMP NULL,
+    resolved_by VARCHAR(50),
+    FOREIGN KEY (resolved_by) REFERENCES users(id)
+);
+
 -- SEED DATA FOR DEMO
 INSERT INTO vendors (id, name, contact_person, mobile, vendor_type, location) VALUES
 ('VEN-001', 'Bihar Fresh Mart', 'Arun Jha', '9988776655', 'Wholesaler', 'Patna'),
@@ -108,3 +122,7 @@ INSERT INTO daily_prices (vegetable, base_price, updated_by) VALUES
 INSERT INTO schemes (id, name, code, total_budget, utilized_budget, status) VALUES
 ('S001', 'Infrastructure Development', 'VEGFED-INF-25', 11430000.00, 4500000.00, 'Active'),
 ('S002', 'Outlet Program', 'VEGFED-OUT-25', 744000.00, 120000.00, 'Active');
+
+INSERT INTO feedback (name, mobile, category, message, status) VALUES
+('Ram Prakash', '9800011122', 'Pricing', 'Tomato prices in Danapur PVCS are not matching the daily master rate.', 'Open'),
+('Sita Devi', '9700033344', 'Technical', 'Unable to upload land records photo from mobile app.', 'Open');

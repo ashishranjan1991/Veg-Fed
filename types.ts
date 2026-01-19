@@ -66,6 +66,16 @@ export interface FarmerRegistration {
   }[];
 }
 
+export interface FeedbackEntry {
+  id: number;
+  name: string;
+  mobile: string;
+  category: 'Technical' | 'Pricing' | 'Membership' | 'Scheme' | 'Other';
+  message: string;
+  status: 'Open' | 'In Progress' | 'Resolved';
+  createdAt: string;
+}
+
 export interface LandPlot {
   id: string;
   farmerId: string;

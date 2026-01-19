@@ -23,6 +23,23 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
   const [otpCode, setOtpCode] = useState('');
   const [dbtId, setDbtId] = useState('');
 
+  // Feedback logic
+  const [feedbackSent, setFeedbackSent] = useState(false);
+  const [feedbackForm, setFeedbackForm] = useState({
+    name: '',
+    mobile: '',
+    category: 'Technical',
+    message: ''
+  });
+
+  const handleFeedbackSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulate API call to save to SQL
+    setFeedbackSent(true);
+    setTimeout(() => setFeedbackSent(false), 5000);
+    setFeedbackForm({ name: '', mobile: '', category: 'Technical', message: '' });
+  };
+
   const unions = [
     { name: 'हरित (Harit)', location: 'Patna' },
     { name: 'तिरहुत (Tirhut)', location: 'Motihari' },
@@ -154,6 +171,102 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         </div>
         <div className="absolute bottom-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
            <i className="fa-solid fa-leaf text-[30rem] rotate-45 text-white"></i>
+        </div>
+      </section>
+
+      {/* Support & Feedback Section */}
+      <section id="support" className="py-20 px-6 bg-slate-50 dark:bg-slate-950 transition-colors">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-emerald-600 font-black text-xs uppercase tracking-[0.2em]">{t.supportAndFeedback}</span>
+              <h3 className="text-4xl font-black text-gray-900 dark:text-white mt-4 mb-6">{t.reportIssue}</h3>
+              <p className="text-gray-500 dark:text-slate-400 text-lg mb-8 leading-relaxed">
+                Facing technical difficulties or have suggestions? Use our help desk to raise a ticket. Our district teams actively monitor and resolve these issues.
+              </p>
+              <div className="space-y-6">
+                 {[
+                   { icon: 'fa-headset', title: '24/7 Helpline', detail: '1800-1800-110' },
+                   { icon: 'fa-envelope-open-text', title: 'Email Support', detail: 'support.vegfed@bihar.gov.in' }
+                 ].map((item, idx) => (
+                   <div key={idx} className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-gray-100 dark:border-slate-800">
+                        <i className={`fa-solid ${item.icon}`}></i>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{item.title}</p>
+                        <p className="text-lg font-bold text-gray-900 dark:text-slate-100">{item.detail}</p>
+                      </div>
+                   </div>
+                 ))}
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-xl border border-gray-100 dark:border-slate-800">
+              {feedbackSent ? (
+                <div className="text-center py-10 animate-in zoom-in duration-500">
+                   <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-4xl mx-auto mb-6">
+                      <i className="fa-solid fa-check-circle"></i>
+                   </div>
+                   <h4 className="text-2xl font-black text-gray-900 dark:text-white mb-4">Thank You!</h4>
+                   <p className="text-gray-500 font-medium">{t.feedbackSuccess}</p>
+                   <button onClick={() => setFeedbackSent(false)} className="mt-8 text-emerald-600 font-black text-xs uppercase tracking-widest">Raise Another Ticket</button>
+                </div>
+              ) : (
+                <form onSubmit={handleFeedbackSubmit} className="space-y-6">
+                   <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Your Name</label>
+                        <input 
+                          required
+                          type="text" 
+                          className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold" 
+                          value={feedbackForm.name}
+                          onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Mobile No.</label>
+                        <input 
+                          required
+                          type="tel" 
+                          className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold" 
+                          value={feedbackForm.mobile}
+                          onChange={e => setFeedbackForm({...feedbackForm, mobile: e.target.value})}
+                        />
+                      </div>
+                   </div>
+                   <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">{t.issueCategory}</label>
+                      <select 
+                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold"
+                        value={feedbackForm.category}
+                        onChange={e => setFeedbackForm({...feedbackForm, category: e.target.value})}
+                      >
+                         <option>Technical</option>
+                         <option>Pricing</option>
+                         <option>Membership</option>
+                         <option>Scheme</option>
+                         <option>Other</option>
+                      </select>
+                   </div>
+                   <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">{t.message}</label>
+                      <textarea 
+                        required
+                        rows={4}
+                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-medium"
+                        value={feedbackForm.message}
+                        onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                      ></textarea>
+                   </div>
+                   <button type="submit" className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 transition-all active:scale-95">
+                      {t.submitFeedback}
+                   </button>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 

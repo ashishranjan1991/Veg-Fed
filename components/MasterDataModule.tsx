@@ -5,7 +5,13 @@ import { Language, translations } from '../translations';
 
 const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ role, language = 'en' }) => {
   const t = translations[language];
-  const [activeSubTab, setActiveSubTab] = useState('vegetables');
+  const isPVCS = role === UserRole.PVCS_USER;
+  
+  const initialTabs = isPVCS 
+    ? ['daily-pricing', 'vendors'] 
+    : ['vegetables', 'daily-pricing', 'vendors', 'pricing', 'parameters'];
+
+  const [activeSubTab, setActiveSubTab] = useState(initialTabs[0]);
   const [isSyncing, setIsSyncing] = useState(false);
 
   const [dailyPrices, setDailyPrices] = useState<DailyPrice[]>([
@@ -40,8 +46,12 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
     <div className="animate-in fade-in duration-500">
       <div className="mb-8 flex justify-between items-end">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">{t.masterDataMgmt}</h2>
-          <p className="text-gray-500 dark:text-slate-400 text-sm">Configure system-wide reference data and MySQL synchronization</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+            {isPVCS ? "Local Node Master Data" : t.masterDataMgmt}
+          </h2>
+          <p className="text-gray-500 dark:text-slate-400 text-sm">
+            {isPVCS ? "Manage local center vendors and daily procurement prices" : "Configure system-wide reference data and MySQL synchronization"}
+          </p>
         </div>
         <button 
           onClick={handleSyncWithDB}
@@ -49,12 +59,12 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
           className="bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg hover:bg-emerald-700 transition-all flex items-center space-x-2"
         >
           {isSyncing ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-cloud-arrow-up"></i>}
-          <span>Push to MySQL</span>
+          <span>{isPVCS ? "Sync to Cluster" : "Push to MySQL"}</span>
         </button>
       </div>
 
       <div className="flex bg-white dark:bg-slate-900 rounded-xl shadow-sm border dark:border-slate-800 overflow-hidden mb-6 transition-colors">
-        {['vegetables', 'daily-pricing', 'vendors', 'pricing', 'parameters'].map((tab) => (
+        {initialTabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveSubTab(tab)}
@@ -71,8 +81,12 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
         {activeSubTab === 'daily-pricing' && (
           <div className="space-y-8">
             <div className="flex justify-between items-center">
-               <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">{t.centralPrices}</h3>
-               <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full uppercase tracking-widest">Authorized Change Level</span>
+               <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">
+                 {isPVCS ? "Local Node Daily Pricing" : t.centralPrices}
+               </h3>
+               <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full uppercase tracking-widest">
+                 {isPVCS ? "Center Level Override" : "Authorized Change Level"}
+               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {dailyPrices.map(p => (
@@ -94,7 +108,9 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
             <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/50 flex items-start space-x-4">
                <i className="fa-solid fa-circle-info text-blue-600 mt-1"></i>
                <p className="text-xs text-blue-800 dark:text-blue-300 font-medium leading-relaxed">
-                 Prices updated here are immediately visible to all PVCS nodes in the 3-tier network upon MySQL sync. Grade-wise multipliers will be applied automatically at the point of procurement.
+                 {isPVCS 
+                   ? "Prices modified here apply only to procurement receipts at this local node. Sync to cluster ensures all local transactions use these overrides."
+                   : "Prices updated here are immediately visible to all PVCS nodes in the 3-tier network upon MySQL sync. Grade-wise multipliers will be applied automatically at the point of procurement."}
                </p>
             </div>
           </div>
@@ -103,7 +119,9 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
         {activeSubTab === 'vendors' && (
           <div className="space-y-8">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">Vendor Master</h3>
+              <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">
+                {isPVCS ? "Local Center Vendors" : "Vendor Master"}
+              </h3>
               <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none transition-all">Add New Vendor</button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

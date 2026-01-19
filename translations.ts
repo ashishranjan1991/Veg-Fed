@@ -54,7 +54,7 @@ export const translations = {
     chairman: "Chairman, VEGFED",
     md: "Managing Director, VEGFED",
     grade: "Quality Grade",
-    status: "Payment Status",
+    status: "Status",
     district: "District Union",
     last7Days: "Last 7 Days",
     thisMonth: "This Month",
@@ -66,7 +66,14 @@ export const translations = {
     centralPrices: "Centralized Daily Pricing",
     dbStatus: "Database Connectivity",
     syncSuccess: "Sync Successful",
-    mysqlConnected: "MySQL Server: Connected"
+    mysqlConnected: "MySQL Server: Connected",
+    supportAndFeedback: "Support & Feedback",
+    reportIssue: "Report an Issue",
+    issueCategory: "Issue Category",
+    message: "Message",
+    submitFeedback: "Submit Feedback",
+    feedbackSuccess: "Your ticket has been raised successfully. Our team will contact you soon.",
+    tickets: "Support Tickets"
   },
   hi: {
     dashboard: "डैशबोर्ड",
@@ -122,7 +129,7 @@ export const translations = {
     chairman: "अध्यक्ष, वेजफेड",
     md: "प्रबंध निदेशक, वेजफेड",
     grade: "गुणवत्ता ग्रेड",
-    status: "भुगतान स्थिति",
+    status: "स्थिति",
     district: "जिला संघ",
     last7Days: "पिछले 7 दिन",
     thisMonth: "इस महीने",
@@ -134,7 +141,14 @@ export const translations = {
     centralPrices: "केंद्रीकृत दैनिक मूल्य निर्धारण",
     dbStatus: "डेटाबेस कनेक्टिविटी",
     syncSuccess: "सिंक सफल रहा",
-    mysqlConnected: "MySQL सर्वर: कनेक्टेड"
+    mysqlConnected: "MySQL सर्वर: कनेक्टेड",
+    supportAndFeedback: "सहायता और प्रतिक्रिया",
+    reportIssue: "समस्या की रिपोर्ट करें",
+    issueCategory: "समस्या श्रेणी",
+    message: "संदेश",
+    submitFeedback: "प्रतिक्रिया भेजें",
+    feedbackSuccess: "आपका टिकट सफलतापूर्वक दर्ज कर लिया गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।",
+    tickets: "सहायता टिकट"
   }
 };
 
