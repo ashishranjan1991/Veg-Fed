@@ -23,7 +23,8 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
   const [otpCode, setOtpCode] = useState('');
   const [dbtId, setDbtId] = useState('');
 
-  // Feedback logic
+  // Feedback Hub logic
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [feedbackForm, setFeedbackForm] = useState({
     name: '',
@@ -34,10 +35,17 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
 
   const handleFeedbackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call to save to SQL
     setFeedbackSent(true);
-    setTimeout(() => setFeedbackSent(false), 5000);
+    setTimeout(() => {
+      setFeedbackSent(false);
+      setIsFormOpen(false);
+    }, 3000);
     setFeedbackForm({ name: '', mobile: '', category: 'Technical', message: '' });
+  };
+
+  const openSupportForm = (category: string) => {
+    setFeedbackForm({ ...feedbackForm, category });
+    setIsFormOpen(true);
   };
 
   const unions = [
@@ -174,100 +182,137 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         </div>
       </section>
 
-      {/* Support & Feedback Section */}
-      <section id="support" className="py-20 px-6 bg-slate-50 dark:bg-slate-950 transition-colors">
+      {/* Support Hub Section - OPTIMIZED CLICK-TO-OPEN */}
+      <section id="support" className="py-24 px-6 bg-slate-50 dark:bg-slate-950 transition-colors">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="text-emerald-600 font-black text-xs uppercase tracking-[0.2em]">{t.supportAndFeedback}</span>
-              <h3 className="text-4xl font-black text-gray-900 dark:text-white mt-4 mb-6">{t.reportIssue}</h3>
-              <p className="text-gray-500 dark:text-slate-400 text-lg mb-8 leading-relaxed">
-                Facing technical difficulties or have suggestions? Use our help desk to raise a ticket. Our district teams actively monitor and resolve these issues.
-              </p>
-              <div className="space-y-6">
-                 {[
-                   { icon: 'fa-headset', title: '24/7 Helpline', detail: '1800-1800-110' },
-                   { icon: 'fa-envelope-open-text', title: 'Email Support', detail: 'support.vegfed@bihar.gov.in' }
-                 ].map((item, idx) => (
-                   <div key={idx} className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-gray-100 dark:border-slate-800">
-                        <i className={`fa-solid ${item.icon}`}></i>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{item.title}</p>
-                        <p className="text-lg font-bold text-gray-900 dark:text-slate-100">{item.detail}</p>
-                      </div>
-                   </div>
-                 ))}
-              </div>
-            </div>
+          <div className="text-center mb-16">
+            <span className="text-emerald-600 font-black text-xs uppercase tracking-[0.3em]">{t.supportAndFeedback}</span>
+            <h3 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mt-4 mb-6">How can we help?</h3>
+            <p className="text-gray-500 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+              Select a category to raise a specialized ticket. Our district teams are ready to resolve your issues within 24-48 hours.
+            </p>
+          </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-xl border border-gray-100 dark:border-slate-800">
-              {feedbackSent ? (
-                <div className="text-center py-10 animate-in zoom-in duration-500">
-                   <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-4xl mx-auto mb-6">
-                      <i className="fa-solid fa-check-circle"></i>
-                   </div>
-                   <h4 className="text-2xl font-black text-gray-900 dark:text-white mb-4">Thank You!</h4>
-                   <p className="text-gray-500 font-medium">{t.feedbackSuccess}</p>
-                   <button onClick={() => setFeedbackSent(false)} className="mt-8 text-emerald-600 font-black text-xs uppercase tracking-widest">Raise Another Ticket</button>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+             {[
+               { id: 'Technical', icon: 'fa-microchip', color: 'bg-blue-600', label: 'Technical Issue', detail: 'App errors, login issues' },
+               { id: 'Pricing', icon: 'fa-indian-rupee-sign', color: 'bg-emerald-600', label: 'Pricing Query', detail: 'Rate mismatches' },
+               { id: 'Membership', icon: 'fa-id-card', color: 'bg-amber-600', label: 'Membership', detail: 'ID & Verification status' },
+               { id: 'Other', icon: 'fa-headset', color: 'bg-indigo-600', label: 'General Help', detail: 'General feedback & support' }
+             ].map((item) => (
+               <div 
+                key={item.id} 
+                onClick={() => openSupportForm(item.id)}
+                className="group bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden active:scale-95"
+               >
+                  <div className={`w-14 h-14 ${item.color} text-white rounded-2xl flex items-center justify-center text-xl mb-6 shadow-xl transition-transform group-hover:rotate-6`}>
+                    <i className={`fa-solid ${item.icon}`}></i>
+                  </div>
+                  <h4 className="font-black text-gray-900 dark:text-white text-xl uppercase tracking-tight">{item.label}</h4>
+                  <p className="text-sm text-gray-400 mt-2 font-medium">{item.detail}</p>
+                  <div className="mt-8 flex items-center text-emerald-600 font-black text-[10px] uppercase tracking-widest">
+                    <span>Open Ticket</span>
+                    <i className="fa-solid fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                  </div>
+                  <i className={`fa-solid ${item.icon} absolute -bottom-8 -right-8 text-9xl opacity-[0.03] group-hover:opacity-[0.05] transition-opacity`}></i>
+               </div>
+             ))}
+          </div>
+
+          <div className="mt-20 flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left border-t border-gray-200 dark:border-slate-800 pt-16">
+             <div className="flex items-center space-x-6">
+                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-3xl flex items-center justify-center text-2xl text-emerald-600">
+                  <i className="fa-solid fa-phone-volume"></i>
                 </div>
-              ) : (
-                <form onSubmit={handleFeedbackSubmit} className="space-y-6">
-                   <div className="grid grid-cols-2 gap-6">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Your Name</label>
-                        <input 
-                          required
-                          type="text" 
-                          className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold" 
-                          value={feedbackForm.name}
-                          onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Mobile No.</label>
-                        <input 
-                          required
-                          type="tel" 
-                          className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold" 
-                          value={feedbackForm.mobile}
-                          onChange={e => setFeedbackForm({...feedbackForm, mobile: e.target.value})}
-                        />
-                      </div>
-                   </div>
-                   <div className="space-y-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">{t.issueCategory}</label>
-                      <select 
-                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold"
-                        value={feedbackForm.category}
-                        onChange={e => setFeedbackForm({...feedbackForm, category: e.target.value})}
-                      >
-                         <option>Technical</option>
-                         <option>Pricing</option>
-                         <option>Membership</option>
-                         <option>Scheme</option>
-                         <option>Other</option>
-                      </select>
-                   </div>
-                   <div className="space-y-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">{t.message}</label>
+                <div>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Toll Free Helpline</p>
+                  <p className="text-2xl font-black text-gray-900 dark:text-white">1800-1800-110</p>
+                </div>
+             </div>
+             <div className="w-px h-12 bg-gray-200 dark:bg-slate-800 hidden md:block"></div>
+             <div className="flex items-center space-x-6">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-3xl flex items-center justify-center text-2xl text-blue-600">
+                  <i className="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Email Feedback</p>
+                  <p className="text-2xl font-black text-gray-900 dark:text-white">support.vegfed@bihar.gov.in</p>
+                </div>
+             </div>
+          </div>
+        </div>
+
+        {/* Floating Modal Form (The "Opened" state) */}
+        {isFormOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-end p-4 md:p-10 pointer-events-none">
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm pointer-events-auto animate-in fade-in" onClick={() => setIsFormOpen(false)}></div>
+            <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl relative z-10 pointer-events-auto animate-in slide-in-from-right-full duration-500 overflow-hidden flex flex-col">
+              <div className="p-10 bg-emerald-600 text-white flex justify-between items-center">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-70">Raise Ticket</span>
+                  <h4 className="text-3xl font-black uppercase tracking-tight">{feedbackForm.category} Support</h4>
+                </div>
+                <button onClick={() => setIsFormOpen(false)} className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-2xl flex items-center justify-center text-xl transition-all">
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                {feedbackSent ? (
+                  <div className="text-center py-20 animate-in zoom-in">
+                    <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-4xl mx-auto mb-8 shadow-inner">
+                      <i className="fa-solid fa-cloud-check"></i>
+                    </div>
+                    <h5 className="text-3xl font-black text-gray-900 dark:text-white mb-4">Ticket Raised!</h5>
+                    <p className="text-gray-500 font-medium leading-relaxed">{t.feedbackSuccess}</p>
+                    <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mt-10">Tracking ID: TCK-2026-0042</p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleFeedbackSubmit} className="space-y-8">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                      <input 
+                        required
+                        type="text" 
+                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-2xl px-6 py-4 outline-none focus:ring-4 focus:ring-emerald-500/10 dark:text-white font-bold" 
+                        value={feedbackForm.name}
+                        onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Mobile Contact</label>
+                      <input 
+                        required
+                        type="tel" 
+                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-2xl px-6 py-4 outline-none focus:ring-4 focus:ring-emerald-500/10 dark:text-white font-bold" 
+                        value={feedbackForm.mobile}
+                        onChange={e => setFeedbackForm({...feedbackForm, mobile: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Detailed Message</label>
                       <textarea 
                         required
-                        rows={4}
-                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-medium"
+                        rows={5}
+                        placeholder="Please describe your issue in detail..."
+                        className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-2xl px-6 py-4 outline-none focus:ring-4 focus:ring-emerald-500/10 dark:text-white font-medium"
                         value={feedbackForm.message}
                         onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
                       ></textarea>
-                   </div>
-                   <button type="submit" className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 transition-all active:scale-95">
-                      {t.submitFeedback}
-                   </button>
-                </form>
-              )}
+                    </div>
+                    <button type="submit" className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-emerald-900/30 hover:bg-emerald-700 transition-all active:scale-95">
+                       Submit Ticket
+                    </button>
+                  </form>
+                )}
+              </div>
+              
+              <div className="p-10 border-t dark:border-slate-800 bg-gray-50/50 dark:bg-slate-800/20 text-center">
+                 <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Bihar State Vegetable Cooperative Federation</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Leadership Section */}
