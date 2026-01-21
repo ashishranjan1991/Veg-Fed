@@ -33,26 +33,25 @@ const AdvisoryModule: React.FC<{ role: UserRole }> = ({ role }) => {
 
   return (
     <div className="animate-in fade-in duration-500">
-      <div className="mb-8 flex justify-between items-end">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Farm Advisory & Communication</h2>
-          <p className="text-gray-500 text-sm">Expert guidance for high-yield vegetable production</p>
+          <h2 className="text-3xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">Farm Advisory</h2>
+          <p className="text-gray-500 dark:text-slate-400 text-sm font-medium">Expert guidance for high-yield vegetable production</p>
         </div>
-        <div className="flex space-x-2 bg-white p-1 rounded-xl border shadow-sm">
-          <button className="px-4 py-2 text-xs font-bold text-emerald-600 bg-emerald-50 rounded-lg">New Advisory</button>
-          <button className="px-4 py-2 text-xs font-bold text-gray-400 rounded-lg hover:bg-gray-50">Sent History</button>
-          <button className="px-4 py-2 text-xs font-bold text-gray-400 rounded-lg hover:bg-gray-50">Weather Alerts</button>
+        <div className="flex space-x-2 bg-white dark:bg-slate-900 p-1 rounded-2xl border dark:border-slate-800 shadow-sm">
+          <button className="px-5 py-2.5 text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl transition-all">New Advisory</button>
+          <button className="px-5 py-2.5 text-[10px] font-black uppercase tracking-widest text-gray-400 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-all">History</button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-white p-6 rounded-2xl border shadow-sm h-fit space-y-6">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border dark:border-slate-800 shadow-sm h-fit space-y-8 transition-colors">
           <div>
-            <h3 className="font-bold mb-4 text-lg">Targeting Criteria</h3>
-            <div className="space-y-4">
+            <h3 className="font-black mb-6 text-sm uppercase tracking-widest text-gray-400">Targeting Criteria</h3>
+            <div className="space-y-5">
               <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5">Target Crop</label>
-                <select value={crop} onChange={e => setCrop(e.target.value)} className="w-full border rounded-xl p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Target Crop</label>
+                <select value={crop} onChange={e => setCrop(e.target.value)} className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3.5 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none dark:text-white transition-all">
                   <option>Tomato</option>
                   <option>Potato</option>
                   <option>Onion</option>
@@ -61,8 +60,8 @@ const AdvisoryModule: React.FC<{ role: UserRole }> = ({ role }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5">Current Season</label>
-                <select value={season} onChange={e => setSeason(e.target.value)} className="w-full border rounded-xl p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Current Season</label>
+                <select value={season} onChange={e => setSeason(e.target.value)} className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3.5 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none dark:text-white transition-all">
                   <option>Winter (Rabi)</option>
                   <option>Summer (Zaid)</option>
                   <option>Monsoon (Kharif)</option>
@@ -71,19 +70,17 @@ const AdvisoryModule: React.FC<{ role: UserRole }> = ({ role }) => {
             </div>
           </div>
 
-          <hr className="border-gray-100" />
-
-          <div>
-            <h3 className="font-bold mb-4 text-lg">Scheduling & Delivery</h3>
-            <div className="space-y-4">
+          <div className="pt-8 border-t dark:border-slate-800">
+            <h3 className="font-black mb-6 text-sm uppercase tracking-widest text-gray-400">Scheduling</h3>
+            <div className="space-y-5">
               <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5">Delivery Channel</label>
-                <div className="flex p-1 bg-gray-100 rounded-xl">
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Delivery Channel</label>
+                <div className="flex p-1 bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl">
                   {['sms', 'push', 'both'].map((ch) => (
                     <button
                       key={ch}
                       onClick={() => setTargetChannel(ch as any)}
-                      className={`flex-1 py-2 text-[10px] font-black uppercase rounded-lg transition-all ${targetChannel === ch ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500'}`}
+                      className={`flex-1 py-2.5 text-[9px] font-black uppercase rounded-lg transition-all ${targetChannel === ch ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-slate-300'}`}
                     >
                       {ch}
                     </button>
@@ -91,8 +88,8 @@ const AdvisoryModule: React.FC<{ role: UserRole }> = ({ role }) => {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5">Schedule Delivery</label>
-                <input type="datetime-local" className="w-full border rounded-xl p-3 text-sm outline-none" />
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Schedule Delivery</label>
+                <input type="datetime-local" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl p-3.5 text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white transition-all" />
               </div>
             </div>
           </div>
@@ -100,7 +97,7 @@ const AdvisoryModule: React.FC<{ role: UserRole }> = ({ role }) => {
           <button 
             onClick={generateAdvisory}
             disabled={loading}
-            className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 disabled:bg-gray-300 transition-all shadow-xl shadow-emerald-200"
+            className="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-700 disabled:bg-gray-300 dark:disabled:bg-slate-800 disabled:text-gray-500 transition-all shadow-xl shadow-emerald-500/20 active:scale-95"
           >
             {loading ? <i className="fa-solid fa-spinner fa-spin mr-2"></i> : <i className="fa-solid fa-wand-magic-sparkles mr-2"></i>}
             Generate with Gemini
@@ -108,49 +105,57 @@ const AdvisoryModule: React.FC<{ role: UserRole }> = ({ role }) => {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border shadow-sm min-h-[500px] flex flex-col">
-            <div className="p-6 border-b flex items-center justify-between bg-gray-50/50">
-              <h3 className="font-bold text-lg">Draft Advisory</h3>
+          <div className="bg-white dark:bg-slate-900 rounded-[3rem] border dark:border-slate-800 shadow-sm min-h-[500px] flex flex-col transition-colors overflow-hidden">
+            <div className="p-8 border-b dark:border-slate-800 flex items-center justify-between bg-gray-50/50 dark:bg-slate-800/30">
+              <h3 className="font-black text-xl text-gray-900 dark:text-slate-100 uppercase tracking-tight">Draft Workspace</h3>
               {advisory && (
                 <div className="flex space-x-3">
-                  <button className="text-gray-500 text-sm font-bold flex items-center hover:text-gray-900">
+                  <button className="text-gray-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest flex items-center hover:text-emerald-600 transition-colors">
                     <i className="fa-solid fa-pen-to-square mr-2"></i> Edit
                   </button>
-                  <button className="bg-emerald-600 text-white px-6 py-2 rounded-xl text-sm font-black uppercase tracking-widest hover:bg-emerald-700 shadow-lg shadow-emerald-100">
-                    Send Now
+                  <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
+                    Broadcast
                   </button>
                 </div>
               )}
             </div>
-            <div className="p-8 flex-1">
+            <div className="p-10 flex-1 flex flex-col">
               {loading ? (
-                <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-4">
-                  <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
-                  <p className="font-medium animate-pulse">Crafting expert advice for {crop}...</p>
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-6">
+                  <div className="w-16 h-16 border-4 border-emerald-100 dark:border-slate-800 border-t-emerald-600 rounded-full animate-spin"></div>
+                  <p className="font-black text-[10px] uppercase tracking-widest animate-pulse">Crafting expert advice for {crop}...</p>
                 </div>
               ) : advisory ? (
-                <div className="animate-in fade-in zoom-in-95">
-                  <div className="bg-emerald-50 p-8 rounded-3xl border border-emerald-100 text-gray-800 leading-relaxed text-lg italic shadow-inner">
+                <div className="animate-in fade-in zoom-in-95 duration-500 flex-1 flex flex-col">
+                  <div className="bg-emerald-50/50 dark:bg-emerald-950/20 p-10 rounded-[2.5rem] border border-emerald-100 dark:border-emerald-800/50 text-gray-800 dark:text-slate-200 leading-relaxed text-lg font-medium italic shadow-inner flex-1">
                     {advisory.split('\n').map((para, i) => (
                       <p key={i} className="mb-4 last:mb-0">{para}</p>
                     ))}
                   </div>
-                  <div className="mt-6 flex items-center space-x-4">
-                    <div className="flex -space-x-2">
-                      {[1,2,3].map(i => (
-                        <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-emerald-200 flex items-center justify-center text-[10px] font-bold text-emerald-700">F{i}</div>
-                      ))}
+                  <div className="mt-8 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex -space-x-3">
+                        {[1,2,3].map(i => (
+                          <div key={i} className="w-10 h-10 rounded-xl border-2 border-white dark:border-slate-900 bg-emerald-200 dark:bg-emerald-900 flex items-center justify-center text-[10px] font-black text-emerald-700 dark:text-emerald-300 shadow-sm">F{i}</div>
+                        ))}
+                      </div>
+                      <span className="text-[10px] font-black text-gray-400 tracking-[0.2em] uppercase">Targeting 4,250+ Farmers</span>
                     </div>
-                    <span className="text-xs font-bold text-gray-400 tracking-wider uppercase">Targeting 4,250+ Farmers</span>
+                    <div className="flex items-center space-x-2 text-emerald-600 dark:text-emerald-400">
+                       <i className="fa-solid fa-circle-check"></i>
+                       <span className="text-[10px] font-black uppercase tracking-widest">Compliant with State Policy</span>
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-2 text-center">
-                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-6 text-center">
+                  <div className="w-24 h-24 bg-gray-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 border dark:border-slate-700 shadow-inner">
                     <i className="fa-solid fa-bullhorn text-4xl opacity-20"></i>
                   </div>
-                  <p className="font-bold text-gray-900">Ready to Broadcast</p>
-                  <p className="max-w-xs text-sm">Select a crop and season to start generating highly targeted agricultural guidance for the cooperative network.</p>
+                  <div>
+                    <p className="font-black text-gray-900 dark:text-slate-100 text-xl uppercase tracking-tight">Ready to Broadcast</p>
+                    <p className="max-w-xs text-sm text-gray-500 mt-2 font-medium">Select a crop and season to start generating highly targeted agricultural guidance for the cooperative network.</p>
+                  </div>
                 </div>
               )}
             </div>
