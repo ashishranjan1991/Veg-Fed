@@ -135,32 +135,36 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
         <StatCard title="Active Unions" value="08 / 08" icon="fa-map-location-dot" color="text-blue-600" />
         <StatCard title="Digital Farmer Base" value="48.5k" icon="fa-fingerprint" color="text-amber-600" trend="+400 today" />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-         <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[450px]">
-            <div className="flex items-center justify-between mb-8">
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+         <div className="lg:col-span-8 bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
               <h3 className="text-xl font-black uppercase tracking-tight dark:text-slate-100 text-gray-900">Regional Union Performance</h3>
-              <select className="bg-gray-50 dark:bg-slate-800 border-none rounded-xl text-xs font-bold p-3 outline-none">
-                <option>This Financial Year</option>
-                <option>Last Quarter</option>
+              <select className="bg-gray-50 dark:bg-slate-800 border-none rounded-xl text-[10px] font-black uppercase p-3 outline-none dark:text-slate-300">
+                <option>Volume: High to Low</option>
+                <option>Efficiency: High to Low</option>
               </select>
             </div>
-            <ResponsiveContainer width="100%" height="80%">
-              <BarChart data={[
-                { name: 'Patna', val: 1200 }, { name: 'Gaya', val: 950 }, { name: 'Muzaff.', val: 1400 },
-                { name: 'Purnia', val: 800 }, { name: 'Bhojpur', val: 1100 }, { name: 'Saran', val: 600 }
-              ]}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} dy={10} />
-                <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '16px', color: '#f1f5f9' }}
-                  cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
-                />
-                <Bar dataKey="val" fill="#3b82f6" radius={[12, 12, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="h-[320px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={[
+                  { name: 'Patna', val: 1200 }, { name: 'Gaya', val: 950 }, { name: 'Muzaff.', val: 1400 },
+                  { name: 'Purnia', val: 800 }, { name: 'Bhojpur', val: 1100 }, { name: 'Saran', val: 600 }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} dy={10} />
+                  <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '16px', color: '#f1f5f9' }}
+                    cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
+                  />
+                  <Bar dataKey="val" fill="#3b82f6" radius={[12, 12, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
          </div>
-         <div className="bg-slate-900 p-10 rounded-[3rem] text-white flex flex-col justify-between">
+
+         <div className="lg:col-span-4 bg-slate-900 p-10 rounded-[3rem] text-white flex flex-col justify-between">
             <div className="space-y-6">
               <h4 className="text-2xl font-black leading-tight">Master Price Control</h4>
               <p className="text-sm text-slate-400 font-medium leading-relaxed">System-wide prices were last synchronized 4 hours ago. Next scheduled push to PVCS nodes at 08:00 AM IST.</p>
@@ -175,6 +179,58 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
             </div>
             <button className="mt-8 bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all">Go to Price Master</button>
          </div>
+      </div>
+
+      {/* NEW: Top PVCS Performance Section */}
+      <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+          <div>
+            <h3 className="text-xl font-black uppercase tracking-tight dark:text-slate-100 text-gray-900">Top PVCS Nodes: Procurement & Sales</h3>
+            <p className="text-gray-400 text-xs font-bold uppercase mt-1">Live competitive ranking of primary cooperatives</p>
+          </div>
+          <div className="flex items-center space-x-2 bg-gray-50 dark:bg-slate-800 p-1 rounded-xl">
+             <button className="px-4 py-2 text-[9px] font-black uppercase rounded-lg bg-white dark:bg-slate-700 text-emerald-600 shadow-sm">Daily</button>
+             <button className="px-4 py-2 text-[9px] font-black uppercase rounded-lg text-gray-400 hover:text-gray-600">Monthly</button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { name: 'Danapur Central PVCS', union: 'Harit', vol: '18.4', sales: '4.85', rank: '01' },
+            { name: 'Sherghati Farmers Coop', union: 'Magadh', vol: '15.2', sales: '3.90', rank: '02' },
+            { name: 'Darbhanga North Node', union: 'Mithila', vol: '12.8', sales: '2.45', rank: '03' }
+          ].map((pvcs) => (
+            <div key={pvcs.rank} className="bg-gray-50/50 dark:bg-slate-800/30 p-8 rounded-[2.5rem] border border-gray-50 dark:border-slate-800 group hover:border-emerald-500/30 transition-all">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-lg">Rank #{pvcs.rank}</span>
+                <i className="fa-solid fa-trophy text-amber-500 text-lg"></i>
+              </div>
+              <h4 className="font-black text-gray-900 dark:text-white text-lg leading-tight uppercase tracking-tight">{pvcs.name}</h4>
+              <p className="text-[9px] font-bold text-gray-400 uppercase mt-1 mb-8">{pvcs.union} District Union</p>
+              
+              <div className="space-y-6">
+                <div>
+                   <div className="flex justify-between text-[10px] font-black uppercase tracking-widest mb-2">
+                     <span className="text-gray-400">Procurement</span>
+                     <span className="text-emerald-600">{pvcs.vol} Tons</span>
+                   </div>
+                   <div className="w-full bg-gray-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(Number(pvcs.vol)/20)*100}%` }}></div>
+                   </div>
+                </div>
+                <div>
+                   <div className="flex justify-between text-[10px] font-black uppercase tracking-widest mb-2">
+                     <span className="text-gray-400">Total Sales</span>
+                     <span className="text-blue-600">₹ {pvcs.sales} Lakh</span>
+                   </div>
+                   <div className="w-full bg-gray-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(Number(pvcs.sales)/5)*100}%` }}></div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

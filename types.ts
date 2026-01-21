@@ -34,13 +34,18 @@ export interface DailyPrice {
 export interface ProcurementEntry {
   id: string;
   farmerName: string;
-  vendorId?: string; // New field for vendor option
+  vendorId?: string; 
+  sourceType: 'Farmer' | 'Vendor' | 'Aggregator';
+  location: string;
   vegetable: string;
   quantity: number;
+  unit: 'Kg' | 'Quintal';
   grade: 'A' | 'B' | 'C' | 'D';
-  pricePerKg: number;
+  pricePerUnit: number;
   totalAmount: number;
   timestamp: string;
+  status: 'Draft' | 'Approved' | 'Locked';
+  procurementDate: string;
 }
 
 export interface FarmerRegistration {
