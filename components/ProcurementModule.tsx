@@ -13,6 +13,7 @@ const ProcurementModule: React.FC<ProcurementModuleProps> = ({ role, language = 
   const t = translations[language];
   const [isRecording, setIsRecording] = useState(false);
   const [dbStatus, setDbStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   
   // Simulated Centralised Prices (Fetched from "MySQL Backend")
   const [centralPrices, setCentralPrices] = useState<DailyPrice[]>([
@@ -21,6 +22,24 @@ const ProcurementModule: React.FC<ProcurementModuleProps> = ({ role, language = 
     { vegetable: 'Onion', price: 34.00, lastUpdated: '2026-01-11 08:00', updatedBy: 'Admin' },
     { vegetable: 'Brinjal', price: 21.00, lastUpdated: '2026-01-11 08:00', updatedBy: 'Admin' },
   ]);
+
+  // Auto-refresh mechanism: Fetch latest master data every 5 minutes
+  useEffect(() => {
+    const refreshInterval = setInterval(() => {
+      console.log("Auto-refreshing master prices from MySQL...");
+      // In a real app, this would be an API call: fetch('/api/prices').then(...)
+      // Simulating price fluctuation for realism
+      setCentralPrices(prev => prev.map(p => ({
+        ...p,
+        // Optional: Simulate a tiny market fluctuation
+        price: Number((p.price + (Math.random() * 0.4 - 0.2)).toFixed(2)),
+        lastUpdated: new Date().toLocaleString()
+      })));
+      setLastRefreshed(new Date());
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(refreshInterval);
+  }, []);
 
   // Simulated Vendors (Fetched from "MySQL Backend")
   const [vendors] = useState<Vendor[]>([
@@ -101,6 +120,9 @@ const ProcurementModule: React.FC<ProcurementModuleProps> = ({ role, language = 
                 <i className={`fa-solid fa-database mr-1 ${dbStatus === 'connected' ? 'animate-none' : 'animate-pulse'}`}></i>
                 {dbStatus === 'connected' ? 'MySQL Connected' : 'Syncing...'}
              </span>
+             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest hidden md:inline-block">
+                Auto-sync active (5m)
+             </span>
           </div>
         </div>
         {!isRecording && (
@@ -117,7 +139,16 @@ const ProcurementModule: React.FC<ProcurementModuleProps> = ({ role, language = 
       {isRecording ? (
         <div className="flex flex-col xl:flex-row gap-8 items-start">
           <div className="bg-white dark:bg-slate-900 rounded-3xl border dark:border-slate-800 shadow-xl p-8 flex-1 w-full transition-colors duration-300">
-            <h3 className="text-xl font-bold mb-6 dark:text-slate-100">New Procurement Entry</h3>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold dark:text-slate-100">New Procurement Entry</h3>
+              <div className="flex items-center space-x-2 bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-full border dark:border-slate-700">
+                <i className="fa-solid fa-rotate text-emerald-500 text-[10px] animate-spin-slow"></i>
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                  Price Last Refreshed: {lastRefreshed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="col-span-2">
                 <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Farmer Name / ID</label>
@@ -183,7 +214,7 @@ const ProcurementModule: React.FC<ProcurementModuleProps> = ({ role, language = 
               </div>
               <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl flex flex-col justify-center text-center border border-emerald-100 dark:border-emerald-800/50">
                 <p className="text-[10px] uppercase font-black text-emerald-600 dark:text-emerald-400 tracking-widest">Central Daily Rate (Base)</p>
-                <p className="text-3xl font-black text-emerald-700 dark:text-emerald-300 leading-none mt-1">₹ {getBasePrice(newEntry.vegetable)}</p>
+                <p className="text-3xl font-black text-emerald-700 dark:text-emerald-300 leading-none mt-1">₹ {getBasePrice(newEntry.vegetable).toFixed(2)}</p>
                 <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">Adjusted for Grade {newEntry.grade}: ₹ {calculatePrice().toFixed(2)}</p>
               </div>
             </div>
@@ -239,6 +270,15 @@ const ProcurementModule: React.FC<ProcurementModuleProps> = ({ role, language = 
           </div>
         </div>
       )}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
+        }
+      `}} />
     </div>
   );
 };
