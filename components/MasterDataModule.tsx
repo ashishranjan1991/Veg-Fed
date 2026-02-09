@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { UserRole, Vendor, DailyPrice } from '../types';
 import { Language, translations } from '../translations';
 
@@ -13,6 +13,13 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
 
   const [activeSubTab, setActiveSubTab] = useState(initialTabs[0]);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [vendorView, setVendorView] = useState<'cards' | 'scorecard'>('cards');
+
+  // Vendor Filtering State
+  const [vendorFilters, setVendorFilters] = useState({
+    type: 'All',
+    premiumOnly: false
+  });
 
   const [dailyPrices, setDailyPrices] = useState<DailyPrice[]>([
     { vegetable: 'Tomato', price: 26.50, lastUpdated: '2026-01-11 08:00', updatedBy: 'Admin' },
@@ -22,13 +29,23 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
   ]);
 
   const [vendors] = useState<Vendor[]>([
-    { id: 'VEN-001', name: 'Bihar Fresh Mart', contactPerson: 'Arun Jha', mobile: '9988776655', type: 'Wholesaler', location: 'Patna' },
-    { id: 'VEN-002', name: 'Metro Institutional', contactPerson: 'Sita Ram', mobile: '8877665544', type: 'Institutional', location: 'Gaya' },
+    { id: 'VEN-001', name: 'Bihar Fresh Mart', contactPerson: 'Arun Jha', mobile: '9988776655', type: 'Wholesaler', location: 'Patna', rating: 4.8, fulfillmentRate: 96, priceDeviation: 2.5, isPremium: true },
+    { id: 'VEN-002', name: 'Metro Institutional', contactPerson: 'Sita Ram', mobile: '8877665544', type: 'Institutional', location: 'Gaya', rating: 4.2, fulfillmentRate: 88, priceDeviation: 4.1 },
+    { id: 'VEN-003', name: 'Saran Exports', contactPerson: 'Vikram Singh', mobile: '9122334455', type: 'Exporter', location: 'Chapra', rating: 4.5, fulfillmentRate: 92, priceDeviation: 1.8, isPremium: true },
+    { id: 'VEN-004', name: 'Pataliputra Retail', contactPerson: 'Neha Kumari', mobile: '8005566778', type: 'Retailer', location: 'Patna', rating: 3.5, fulfillmentRate: 75, priceDeviation: 6.2 },
   ]);
+
+  // Filter Logic for Vendors
+  const filteredVendors = useMemo(() => {
+    return vendors.filter(v => {
+      const typeMatch = vendorFilters.type === 'All' || v.type === vendorFilters.type;
+      const premiumMatch = !vendorFilters.premiumOnly || v.isPremium === true;
+      return typeMatch && premiumMatch;
+    });
+  }, [vendors, vendorFilters]);
 
   const handleSyncWithDB = () => {
     setIsSyncing(true);
-    // Simulate MySQL Write
     setTimeout(() => {
       setIsSyncing(false);
       alert(t.syncSuccess);
@@ -40,6 +57,22 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
       p.vegetable === veg ? { ...p, price: Number(val), lastUpdated: new Date().toLocaleString() } : p
     );
     setDailyPrices(updated);
+  };
+
+  const StarRating = ({ rating }: { rating: number }) => {
+    return (
+      <div className="flex items-center space-x-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <i
+            key={star}
+            className={`fa-solid fa-star text-[10px] ${
+              star <= Math.round(rating) ? 'text-amber-400' : 'text-gray-200 dark:text-slate-800'
+            }`}
+          />
+        ))}
+        <span className="text-[10px] font-black ml-1 text-gray-500">{rating.toFixed(1)}</span>
+      </div>
+    );
   };
 
   return (
@@ -77,9 +110,9 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
         ))}
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-[2rem] border dark:border-slate-800 shadow-sm p-10 transition-colors">
+      <div className="bg-white dark:bg-slate-900 rounded-[2rem] border dark:border-slate-800 shadow-sm p-10 transition-colors min-h-[500px]">
         {activeSubTab === 'daily-pricing' && (
-          <div className="space-y-8">
+          <div className="space-y-8 animate-in fade-in">
             <div className="flex justify-between items-center">
                <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">
                  {isPVCS ? "Local Node Daily Pricing" : t.centralPrices}
@@ -105,49 +138,199 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
                 </div>
               ))}
             </div>
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/50 flex items-start space-x-4">
-               <i className="fa-solid fa-circle-info text-blue-600 mt-1"></i>
-               <p className="text-xs text-blue-800 dark:text-blue-300 font-medium leading-relaxed">
-                 {isPVCS 
-                   ? "Prices modified here apply only to procurement receipts at this local node. Sync to cluster ensures all local transactions use these overrides."
-                   : "Prices updated here are immediately visible to all PVCS nodes in the 3-tier network upon MySQL sync. Grade-wise multipliers will be applied automatically at the point of procurement."}
-               </p>
-            </div>
           </div>
         )}
 
         {activeSubTab === 'vendors' && (
-          <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">
-                {isPVCS ? "Local Center Vendors" : "Vendor Master"}
-              </h3>
-              <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none transition-all">Add New Vendor</button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {vendors.map(v => (
-                <div key={v.id} className="p-6 bg-gray-50 dark:bg-slate-800/50 rounded-2xl border dark:border-slate-800 flex items-center justify-between group">
-                  <div className="flex items-center space-x-5">
-                    <div className="w-14 h-14 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center text-emerald-600 text-2xl shadow-sm border dark:border-slate-700">
-                      <i className="fa-solid fa-shop"></i>
-                    </div>
-                    <div>
-                      <h4 className="font-black text-gray-900 dark:text-slate-100 text-lg">{v.name}</h4>
-                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{v.type} • {v.location}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs font-bold text-gray-700 dark:text-slate-300">{v.contactPerson}</p>
-                    <p className="text-[10px] text-gray-400 mt-1">{v.mobile}</p>
-                  </div>
+          <div className="space-y-8 animate-in fade-in">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">
+                  {isPVCS ? "Local Center Vendors" : "Vendor Registry & Performance"}
+                </h3>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Tier-Wise Compliance & Rating Matrix</p>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="bg-gray-100 dark:bg-slate-800 p-1 rounded-xl flex">
+                  <button onClick={() => setVendorView('cards')} className={`px-4 py-2 text-[9px] font-black uppercase rounded-lg transition-all ${vendorView === 'cards' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm' : 'text-gray-400'}`}>Profile Cards</button>
+                  <button onClick={() => setVendorView('scorecard')} className={`px-4 py-2 text-[9px] font-black uppercase rounded-lg transition-all ${vendorView === 'scorecard' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm' : 'text-gray-400'}`}>Scorecard View</button>
                 </div>
-              ))}
+                <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none transition-all">Add Vendor</button>
+              </div>
             </div>
+
+            {/* Vendor Filter UI */}
+            <div className="bg-gray-50 dark:bg-slate-800/50 p-6 rounded-[2rem] border dark:border-slate-800 flex flex-wrap items-center gap-6 shadow-inner">
+               <div className="flex items-center space-x-3">
+                  <i className="fa-solid fa-filter text-emerald-600 text-xs"></i>
+                  <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Filter By</span>
+               </div>
+               
+               <div className="flex flex-col space-y-1">
+                  <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest ml-1">Vendor Category</label>
+                  <select 
+                    value={vendorFilters.type}
+                    onChange={(e) => setVendorFilters({...vendorFilters, type: e.target.value})}
+                    className="bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-xl px-4 py-2 text-[10px] font-black uppercase outline-none focus:ring-2 focus:ring-emerald-500 transition-all dark:text-white"
+                  >
+                    <option value="All">All Categories</option>
+                    <option value="Wholesaler">Wholesaler</option>
+                    <option value="Retailer">Retailer</option>
+                    <option value="Exporter">Exporter</option>
+                    <option value="Institutional">Institutional</option>
+                  </select>
+               </div>
+
+               <div className="flex items-center space-x-3 bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-xl px-4 py-2.5 transition-all">
+                  <input 
+                    type="checkbox" 
+                    id="premium-toggle"
+                    checked={vendorFilters.premiumOnly}
+                    onChange={(e) => setVendorFilters({...vendorFilters, premiumOnly: e.target.checked})}
+                    className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <label htmlFor="premium-toggle" className="text-[10px] font-black text-gray-600 dark:text-slate-300 uppercase tracking-widest cursor-pointer select-none">
+                    Premium Partners Only
+                  </label>
+               </div>
+
+               <button 
+                onClick={() => setVendorFilters({type: 'All', premiumOnly: false})}
+                className="text-[9px] font-black text-emerald-600 uppercase tracking-widest hover:underline"
+               >
+                 Reset Filters
+               </button>
+
+               <div className="ml-auto">
+                 <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Showing {filteredVendors.length} Partners</span>
+               </div>
+            </div>
+
+            {vendorView === 'cards' ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {filteredVendors.map(v => (
+                  <div key={v.id} className="p-8 bg-gray-50 dark:bg-slate-800/40 rounded-[2.5rem] border dark:border-slate-800 flex flex-col group hover:border-emerald-500/50 transition-all relative overflow-hidden shadow-sm">
+                    <div className="flex items-start justify-between mb-8">
+                      <div className="flex items-center space-x-5">
+                        <div className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-sm border transition-all ${v.isPremium ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-white dark:bg-slate-900 text-emerald-600 border-gray-100 dark:border-slate-700'}`}>
+                          <i className="fa-solid fa-shop"></i>
+                        </div>
+                        <div>
+                          <div className="flex items-center space-x-2">
+                             <h4 className="font-black text-gray-900 dark:text-slate-100 text-xl tracking-tight">{v.name}</h4>
+                             {v.isPremium && <i className="fa-solid fa-circle-check text-emerald-500 text-xs" title="Verified Premium Partner"></i>}
+                          </div>
+                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{v.type} • {v.location}</p>
+                          <div className="mt-2">
+                            <StarRating rating={v.rating} />
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${v.rating >= 4.5 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                        {v.rating >= 4.5 ? 'Elite' : 'Standard'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-8 mb-8">
+                       <div className="space-y-3">
+                          <div className="flex justify-between text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                            <span>Fulfillment</span>
+                            <span className="text-emerald-600">{v.fulfillmentRate}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                             <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${v.fulfillmentRate}%` }}></div>
+                          </div>
+                       </div>
+                       <div className="space-y-3">
+                          <div className="flex justify-between text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                            <span>Price Deviation</span>
+                            <span className={v.priceDeviation > 5 ? 'text-amber-500' : 'text-blue-500'}>{v.priceDeviation}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                             <div className={`h-full rounded-full ${v.priceDeviation > 5 ? 'bg-amber-500' : 'bg-blue-500'}`} style={{ width: `${Math.min(v.priceDeviation * 10, 100)}%` }}></div>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="flex items-center justify-between mt-auto pt-6 border-t dark:border-slate-800">
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Contact Person</span>
+                        <span className="text-xs font-bold text-gray-700 dark:text-slate-300">{v.contactPerson}</span>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button className="w-10 h-10 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-xl flex items-center justify-center text-gray-400 hover:text-emerald-600 transition-all"><i className="fa-solid fa-phone-flip text-[10px]"></i></button>
+                        <button className="w-10 h-10 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-xl flex items-center justify-center text-gray-400 hover:text-emerald-600 transition-all"><i className="fa-solid fa-chart-line text-[10px]"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {filteredVendors.length === 0 && (
+                  <div className="col-span-2 py-20 text-center bg-gray-50 dark:bg-slate-800/20 rounded-[2.5rem] border-2 border-dashed border-gray-200 dark:border-slate-800">
+                    <p className="text-sm font-black text-gray-400 uppercase tracking-widest italic">No vendors match the active filters</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="bg-gray-50/50 dark:bg-slate-800/30 rounded-[2.5rem] border dark:border-slate-800 overflow-hidden animate-in zoom-in-95 duration-300 shadow-sm">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-gray-100 dark:bg-slate-800/80 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b dark:border-slate-700">
+                      <th className="px-8 py-5">Vendor ID & Name</th>
+                      <th className="px-8 py-5">Performance Rating</th>
+                      <th className="px-8 py-5 text-center">Fulfillment Rate</th>
+                      <th className="px-8 py-5 text-center">Avg. Price Dev.</th>
+                      <th className="px-8 py-5 text-right">Compliance</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y dark:divide-slate-800">
+                    {filteredVendors.map(v => (
+                      <tr key={v.id} className="hover:bg-white dark:hover:bg-slate-800 transition-colors group">
+                        <td className="px-8 py-6">
+                           <div className="flex items-center space-x-3">
+                              <span className="text-[10px] font-mono text-gray-400">{v.id}</span>
+                              <p className="text-sm font-black text-gray-900 dark:text-slate-100">{v.name}</p>
+                           </div>
+                        </td>
+                        <td className="px-8 py-6">
+                           <div className="flex flex-col space-y-1">
+                              <StarRating rating={v.rating} />
+                              <span className="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em]">{v.rating >= 4.5 ? 'Exceeds Expectations' : 'Meeting Standards'}</span>
+                           </div>
+                        </td>
+                        <td className="px-8 py-6 text-center">
+                           <span className={`px-4 py-1.5 rounded-full text-[11px] font-black ${v.fulfillmentRate > 90 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                             {v.fulfillmentRate}%
+                           </span>
+                        </td>
+                        <td className="px-8 py-6 text-center">
+                           <span className={`text-[11px] font-black ${v.priceDeviation < 3 ? 'text-blue-600' : 'text-amber-500'}`}>
+                             {v.priceDeviation > 0 ? '+' : ''}{v.priceDeviation}%
+                           </span>
+                        </td>
+                        <td className="px-8 py-6 text-right">
+                           <div className="flex items-center justify-end space-x-3">
+                              <div className={`w-2 h-2 rounded-full ${v.rating > 3 ? 'bg-emerald-500' : 'bg-red-500'} animate-pulse`}></div>
+                              <span className="text-[9px] font-black uppercase text-gray-400">Validated</span>
+                           </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {filteredVendors.length === 0 && (
+                      <tr>
+                        <td colSpan={5} className="px-8 py-20 text-center">
+                          <p className="text-xs font-black text-gray-400 uppercase tracking-widest italic">No matching records found</p>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
         {activeSubTab === 'vegetables' && (
-          <div className="space-y-8">
+          <div className="space-y-8 animate-in fade-in">
              <div className="flex justify-between items-center">
                <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">Vegetable Registry</h3>
              </div>
@@ -177,7 +360,7 @@ const MasterDataModule: React.FC<{ role: UserRole, language?: Language }> = ({ r
         )}
 
         {activeSubTab === 'pricing' && (
-          <div className="space-y-8">
+          <div className="space-y-8 animate-in fade-in">
             <h3 className="text-xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">Quality Multiplier Master</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {['A', 'B', 'C', 'D'].map((grade, i) => (

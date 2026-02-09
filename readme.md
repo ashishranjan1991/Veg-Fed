@@ -1,72 +1,36 @@
-# Bihar State Vegetable Cooperative ERP - Deployment Guide
 
-This document outlines the professional deployment process for the **Bihar State Vegetable Processing & Marketing Co-operative Federation Ltd. (VEGFED)** ERP system on AWS Cloud.
+# Bihar State Vegetable Cooperative ERP (VEGFED)
 
-## 🏗 System Architecture
-*   **Frontend**: React (TypeScript) SPAs hosted on **AWS Amplify** or **Amazon S3 + CloudFront**.
-*   **Database**: **Amazon RDS (MySQL 8.0)** for centralized data storage.
-*   **AI Engine**: **Google Gemini API** for generating real-time agricultural advisories.
-*   **Security**: **AWS IAM** for access control and **Secrets Manager** for API keys.
+A comprehensive, 3-tier digital ecosystem designed for the **Bihar State Vegetable Processing & Marketing Co-operative Federation Ltd.**. This ERP streamlines the journey from the farmer's field to the consumer's plate.
 
----
+## 🌟 Key Features
 
-## 🚀 1. Local Development
-Before deploying, ensure the app runs correctly in your local environment.
+### 🚜 Tier 1: Farmer Empowerment
+*   **DBT Integrated Registration**: Seamless onboarding using Aadhaar-linked DBT identifiers.
+*   **AI Geo-Tagging**: Integrated **Google Maps Grounding (Gemini 2.5 Flash)** to verify land coordinates, evaluate agricultural potential, and identify nearby water resources.
+*   **Digital ID**: Automated generation of VEGFED membership certificates.
 
-```bash
-# Install dependencies
-npm install
+### 🏢 Tier 2: PVCS (Primary Cooperative) Efficiency
+*   **Procurement Gateway**: Strictly controlled inbound procurement (Farmers only) and outbound sales (Vendors/Unions).
+*   **Quality Grading**: Digital grading system (A/B/C) with automated price calculations based on state-defined multipliers.
+*   **Batch Traceability**: QR code generation for every procurement batch, ensuring "Farm-to-Table" transparency.
 
-# Start development server
-npm run dev
-```
+### 🏛️ Tier 3: State Federation & Union Control
+*   **User Management**: State officials can create and authorize Level 2 (PVCS) and Union users.
+*   **Master Price Control**: Centralized daily price setting for the entire state network.
+*   **Scheme Impact Analytics**: Real-time tracking of budget utilization and cooperative performance.
 
----
+## 🛠 Tech Stack
+*   **Frontend**: React 19, Tailwind CSS (Lucide Icons, FontAwesome).
+*   **AI**: Google GenAI SDK (Gemini 2.5 Flash, Gemini 3 Pro).
+*   **Grounding**: Google Maps Grounding for geo-spatial verification.
+*   **Charts**: Recharts for business intelligence visualization.
 
-## ☁️ 2. AWS Frontend Deployment (AWS Amplify)
-AWS Amplify is the recommended method for deploying this React application as it handles CI/CD and SSL automatically.
-
-1.  **Connect Repository**: Connect your GitHub/Bitbucket repository to the AWS Amplify Console.
-2.  **Build Settings**: Amplify will auto-detect the build settings. Ensure the `baseDirectory` is set to `dist` or `build`.
-3.  **Environment Variables**:
-    *   Go to **App Settings > Environment Variables**.
-    *   Add `API_KEY`: [Your Google Gemini API Key].
-4.  **Deploy**: Trigger a build. Amplify will provision a CloudFront distribution and provide an `https://...` URL.
-
----
-
-## 🗄️ 3. Database Setup (Amazon RDS)
-To enable the backend connectivity shown in the ERP modules:
-
-1.  **Create RDS Instance**:
-    *   **Engine**: MySQL 8.0.x
-    *   **Tier**: Free Tier or Burstable (t3.micro/small).
-    *   **Public Access**: Set to "No" (use a Bastion host or VPC Peering for security).
-2.  **Security Groups**: Allow inbound traffic on port `3306` from the application's VPC.
-3.  **Initialize Schema**:
-    *   Connect to the instance using a client (MySQL Workbench/DBeaver).
-    *   Execute the `veg.sql` file found in the project root to create tables and seed initial data.
+## 🚦 Getting Started
+1.  **Login**: Use the "Tier Switcher" in the sidebar to simulate different roles (Farmer, PVCS, State).
+2.  **Geo-Verify**: Go to **Land & Crops**, register a plot, and use the "Verify Geo-Tagging" button to see Gemini + Maps Grounding in action.
+3.  **Procure**: As a PVCS user, use the **Procurement Gateway** to record intake from farmers and sales to vendors.
+4.  **Manage**: As a State Official, use **User Management** to oversee the cooperative personnel network.
 
 ---
-
-## 🔐 4. Configuration & Security
-*   **SSL/TLS**: AWS Amplify provides managed certificates. If using S3+CloudFront, use **AWS Certificate Manager (ACM)**.
-*   **Gemini API Protection**: Do not hardcode the `process.env.API_KEY`. Ensure it is only accessible via the build-time environment in Amplify.
-*   **CORS Configuration**: If you build a custom Node.js API later, ensure CORS allows requests only from your Amplify domain.
-
----
-
-## 📊 5. Post-Deployment Maintenance
-1.  **Price Sync**: Admins must use the **Master Data Module** to push "Centralized Daily Prices" to the MySQL database every morning (08:00 AM IST).
-2.  **Backups**: Enable **Automated Backups** in RDS with a 7-day retention period.
-3.  **Monitoring**: Use **Amazon CloudWatch** to monitor frontend latency and database CPU utilization.
-
----
-
-## 📞 Support & Credits
-*   **Organization**: Bihar State Vegetable Processing & Marketing Co-operative Federation Ltd. (VEGFED)
-*   **Department**: Cooperative Department, Government of Bihar.
-*   **Developer Notes**: This ERP implements a 3-tier framework (Farmer -> PVCS -> District Union).
-
----
-*Generated by the VEGFED Engineering Team.*
+*Developed for the Cooperative Department, Government of Bihar.*

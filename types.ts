@@ -22,6 +22,11 @@ export interface Vendor {
   mobile: string;
   type: 'Wholesaler' | 'Retailer' | 'Exporter' | 'Institutional';
   location: string;
+  // Enhanced performance metrics
+  rating: number; // 1-5 scale
+  fulfillmentRate: number; // Percentage
+  priceDeviation: number; // Percentage from master price
+  isPremium?: boolean;
 }
 
 export interface DailyPrice {
@@ -35,7 +40,6 @@ export interface ProcurementEntry {
   id: string;
   farmerName: string;
   vendorId?: string; 
-  // Fix: Added 'Union' to the union type to support district union transactions in the ERP workflow
   sourceType: 'Farmer' | 'Vendor' | 'Aggregator' | 'Union';
   location: string;
   vegetable: string;
@@ -47,6 +51,10 @@ export interface ProcurementEntry {
   timestamp: string;
   status: 'Draft' | 'Approved' | 'Locked';
   procurementDate: string;
+  // Logistics for Sales
+  vehicleNo?: string;
+  driverName?: string;
+  driverContact?: string;
 }
 
 export interface FarmerRegistration {
@@ -65,6 +73,8 @@ export interface FarmerRegistration {
   landArea: number;
   status: 'Draft' | 'Submitted' | 'Under Review' | 'Approved' | 'Rejected' | 'Deactivated';
   applicationDate: string;
+  latitude?: number;
+  longitude?: number;
   documents?: {
     type: string;
     status: 'Pending' | 'Verified' | 'Rejected';

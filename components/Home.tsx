@@ -15,10 +15,12 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, setFontSize, theme, setTheme }) => {
   const [tab, setTab] = useState<'login' | 'register'>('login');
+  const [loginSubView, setLoginSubView] = useState<'form' | 'forgot-identity' | 'forgot-otp' | 'forgot-reset'>('form');
   const [loginRole, setLoginRole] = useState<UserRole>(UserRole.FARMER);
   const t = translations[language];
   
   const [otpSent, setOtpSent] = useState(false);
+  const [recoveryMobile, setRecoveryMobile] = useState('');
   const [otpCode, setOtpCode] = useState('');
   const [dbtId, setDbtId] = useState('');
 
@@ -32,6 +34,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
   });
 
   const logoUrl = "https://tarkaari.in/assets/img/logo-veg.png";
+  const iycLogoUrl = "https://esahkari.bihar.gov.in/coop/MIS/img/Iyclogo.png";
   const heroImageUrl = "https://tarkaari.in/Photo/slide_12.jpg";
 
   const handleFeedbackSubmit = (e: React.FormEvent) => {
@@ -43,9 +46,17 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
     }, 2500);
   };
 
-  const openSupportForm = (category: string) => {
-    setFeedbackForm({ ...feedbackForm, category });
-    setIsFormOpen(true);
+  const handleRecoveryStart = () => {
+    setLoginSubView('forgot-otp');
+  };
+
+  const handleRecoveryVerify = () => {
+    setLoginSubView('forgot-reset');
+  };
+
+  const handlePasswordReset = () => {
+    alert("Password updated successfully. Please login with your new credentials.");
+    setLoginSubView('form');
   };
 
   const unions = [
@@ -121,6 +132,11 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
                   <button onClick={() => setLanguage('hi')} aria-pressed={language === 'hi'} className={`px-2 md:px-2.5 py-1 text-[9px] md:text-[10px] font-black rounded ${language === 'hi' ? 'bg-white dark:bg-slate-700 text-emerald-600 shadow-sm' : 'text-gray-400'}`}>हिन्दी</button>
                </div>
              </div>
+
+             {/* Right Corner Logo - Bihar Cooperative / IYCL */}
+             <div className="hidden md:flex items-center pl-4 border-l border-gray-200 dark:border-slate-800">
+                <img src={iycLogoUrl} alt="Bihar Cooperative Logo" className="h-10 md:h-12 w-auto object-contain" />
+             </div>
           </div>
         </div>
       </header>
@@ -134,7 +150,6 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
 
       {/* Hero Section */}
       <section className="relative py-20 px-6 overflow-hidden min-h-[600px] flex items-center">
-        {/* Hero Background Image Layer */}
         <div className="absolute inset-0 z-0">
           <img src={heroImageUrl} className="w-full h-full object-cover" alt="Bihar Fresh Vegetables" />
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/95 via-emerald-900/80 to-emerald-950/95"></div>
@@ -162,30 +177,101 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
           <div className="lg:col-span-5 animate-in fade-in slide-in-from-right-8 duration-700">
             <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-[3rem] p-10 shadow-2xl border-4 border-emerald-500/20 transition-colors">
               <div className="flex bg-gray-100 dark:bg-slate-800 p-1.5 rounded-2xl mb-8" role="tablist">
-                <button onClick={() => setTab('login')} role="tab" aria-selected={tab === 'login'} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'login' ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-400'}`}>{t.signIn}</button>
+                <button onClick={() => {setTab('login'); setLoginSubView('form');}} role="tab" aria-selected={tab === 'login'} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'login' ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-400'}`}>{t.signIn}</button>
                 <button onClick={() => setTab('register')} role="tab" aria-selected={tab === 'register'} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'register' ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-400'}`}>{t.joinCooperative}</button>
               </div>
 
               {tab === 'login' ? (
-                <div className="space-y-5">
-                  <div className="grid grid-cols-2 gap-2 mb-4" role="group" aria-label="Login Role Selection">
-                    <button onClick={() => setLoginRole(UserRole.FARMER)} aria-pressed={loginRole === UserRole.FARMER} className={`py-3 text-[10px] font-black uppercase rounded-lg border transition-all ${loginRole === UserRole.FARMER ? 'bg-emerald-600 text-white border-emerald-600' : 'text-gray-400 border-gray-200'}`}>Farmer</button>
-                    <button onClick={() => setLoginRole(UserRole.PVCS_USER)} aria-pressed={loginRole !== UserRole.FARMER} className={`py-3 text-[10px] font-black uppercase rounded-lg border transition-all ${loginRole !== UserRole.FARMER ? 'bg-emerald-600 text-white border-emerald-600' : 'text-gray-400 border-gray-200'}`}>Official</button>
-                  </div>
-                  <div>
-                    <label htmlFor="login-id" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.userId}</label>
-                    <input id="login-id" type="text" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
-                  </div>
-                  <div>
-                    <label htmlFor="login-pwd" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.password}</label>
-                    <input id="login-pwd" type="password" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
-                  </div>
-                  <button onClick={() => onLogin(loginRole)} aria-label="Login" className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 shadow-xl transition-all">
-                    {t.loginButton}
-                  </button>
+                <div className="animate-in fade-in duration-300">
+                  {loginSubView === 'form' ? (
+                    <div className="space-y-5">
+                      <div className="grid grid-cols-2 gap-2 mb-4" role="group" aria-label="Login Role Selection">
+                        <button onClick={() => setLoginRole(UserRole.FARMER)} aria-pressed={loginRole === UserRole.FARMER} className={`py-3 text-[10px] font-black uppercase rounded-lg border transition-all ${loginRole === UserRole.FARMER ? 'bg-emerald-600 text-white border-emerald-600' : 'text-gray-400 border-gray-200'}`}>Farmer</button>
+                        <button onClick={() => setLoginRole(UserRole.PVCS_USER)} aria-pressed={loginRole !== UserRole.FARMER} className={`py-3 text-[10px] font-black uppercase rounded-lg border transition-all ${loginRole !== UserRole.FARMER ? 'bg-emerald-600 text-white border-emerald-600' : 'text-gray-400 border-gray-200'}`}>Official</button>
+                      </div>
+                      <div>
+                        <label htmlFor="login-id" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.userId}</label>
+                        <input id="login-id" type="text" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                      </div>
+                      <div>
+                        <div className="flex justify-between items-center ml-1">
+                          <label htmlFor="login-pwd" className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t.password}</label>
+                          <button onClick={() => setLoginSubView('forgot-identity')} className="text-[10px] font-black text-emerald-600 uppercase hover:underline">Forgot Password?</button>
+                        </div>
+                        <input id="login-pwd" type="password" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                      </div>
+                      <button onClick={() => onLogin(loginRole)} aria-label="Login" className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 shadow-xl transition-all">
+                        {t.loginButton}
+                      </button>
+                    </div>
+                  ) : loginSubView === 'forgot-identity' ? (
+                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+                       <div className="text-center">
+                          <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-950 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+                             <i className="fa-solid fa-shield-halved"></i>
+                          </div>
+                          <h4 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Recover Account</h4>
+                          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Enter your registered mobile number for OTP verification.</p>
+                       </div>
+                       <div>
+                          <label className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">Registered Mobile</label>
+                          <input 
+                            type="tel" 
+                            value={recoveryMobile}
+                            onChange={e => setRecoveryMobile(e.target.value)}
+                            placeholder="+91 XXXXX XXXXX"
+                            className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white font-bold" 
+                          />
+                       </div>
+                       <div className="flex flex-col gap-3">
+                          <button onClick={handleRecoveryStart} className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 transition-all">Send OTP</button>
+                          <button onClick={() => setLoginSubView('form')} className="text-[10px] font-black text-gray-400 uppercase hover:text-gray-600">Back to Login</button>
+                       </div>
+                    </div>
+                  ) : loginSubView === 'forgot-otp' ? (
+                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+                       <div className="text-center">
+                          <div className="w-16 h-16 bg-blue-50 dark:bg-blue-950 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+                             <i className="fa-solid fa-envelope-open-text"></i>
+                          </div>
+                          <h4 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Verify Identity</h4>
+                          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">6-digit code sent to {recoveryMobile || 'your mobile'}.</p>
+                       </div>
+                       <div className="flex justify-center gap-2">
+                          {[1,2,3,4,5,6].map(i => (
+                            <input key={i} type="text" maxLength={1} className="w-10 h-12 bg-gray-50 dark:bg-slate-800 border-2 dark:border-slate-700 rounded-lg text-center font-black text-emerald-600 focus:border-emerald-500 outline-none" />
+                          ))}
+                       </div>
+                       <div className="flex flex-col gap-3">
+                          <button onClick={handleRecoveryVerify} className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 transition-all">Verify OTP</button>
+                          <button className="text-[10px] font-black text-blue-600 uppercase hover:underline">Resend Code (45s)</button>
+                       </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+                       <div className="text-center">
+                          <div className="w-16 h-16 bg-amber-50 dark:bg-amber-950 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+                             <i className="fa-solid fa-key"></i>
+                          </div>
+                          <h4 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Set New Password</h4>
+                          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Minimum 6 characters required.</p>
+                       </div>
+                       <div className="space-y-4">
+                          <div>
+                            <label className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">New Password</label>
+                            <input type="password" placeholder="••••••••" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">Confirm Password</label>
+                            <input type="password" placeholder="••••••••" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                          </div>
+                       </div>
+                       <button onClick={handlePasswordReset} className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 transition-all">Update & Finish</button>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className="space-y-6 animate-in fade-in duration-300">
                   <div>
                     <label htmlFor="reg-dbt" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.dbtNumber}</label>
                     <input id="reg-dbt" type="text" value={dbtId} onChange={e => setDbtId(e.target.value)} placeholder="e.g. 231XXXXXXXX" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
@@ -242,7 +328,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         </div>
       </section>
 
-      {/* DEPARTMENT VISION SECTION - NEW */}
+      {/* DEPARTMENT VISION SECTION */}
       <section className="py-32 px-6 bg-gray-50 dark:bg-slate-950 relative overflow-hidden">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-4xl mx-auto mb-20">
@@ -269,12 +355,11 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
           </div>
         </div>
         
-        {/* Decorative Vision background elements */}
         <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
         <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       </section>
 
-      {/* Brand Values - VEGFED Promise */}
+      {/* Brand Values */}
       <section className="py-24 px-6 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">

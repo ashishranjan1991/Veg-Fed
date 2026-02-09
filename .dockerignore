@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+Dockerfile
+nginx.conf
+deployment.yml
+veg.sql
+.env
+.DS_Store
+npm-debug.log

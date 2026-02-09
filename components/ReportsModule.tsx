@@ -31,13 +31,13 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
   const [reportData, setReportData] = useState<ReportRow[]>([]);
   const [expandedTicketId, setExpandedTicketId] = useState<number | null>(null);
   
-  // Vendor Analytics Data
+  // Vendor Analytics Data - Updated with Rating for Consistency
   const vendorPerformanceData = [
-    { name: 'Bihar Fresh', volume: 4500, avgPrice: 28.5, fulfillment: 98 },
-    { name: 'Metro Mart', volume: 3200, avgPrice: 26.2, fulfillment: 92 },
-    { name: 'Gaya Retail', volume: 2800, avgPrice: 27.8, fulfillment: 85 },
-    { name: 'Saran Export', volume: 5100, avgPrice: 31.0, fulfillment: 95 },
-    { name: 'Patna Union', volume: 1900, avgPrice: 25.5, fulfillment: 78 },
+    { name: 'Bihar Fresh', volume: 4500, avgPrice: 28.5, fulfillment: 96, rating: 4.8 },
+    { name: 'Metro Mart', volume: 3200, avgPrice: 26.2, fulfillment: 88, rating: 4.2 },
+    { name: 'Gaya Retail', volume: 2800, avgPrice: 27.8, fulfillment: 85, rating: 3.9 },
+    { name: 'Saran Export', volume: 5100, avgPrice: 31.0, fulfillment: 92, rating: 4.5 },
+    { name: 'Patna Union', volume: 1900, avgPrice: 25.5, fulfillment: 78, rating: 3.2 },
   ];
 
   const fulfillmentData = [
@@ -104,7 +104,6 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
     setExpandedTicketId(expandedTicketId === id ? null : id);
   };
 
-  // Fixed FilterSection component with proper React.FC type to handle children correctly in TS
   const FilterSection: React.FC<{ title: string; icon: string; children: React.ReactNode }> = ({ title, icon, children }) => (
     <div className="space-y-3">
       <div className="flex items-center space-x-2 text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
@@ -115,9 +114,16 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
     </div>
   );
 
+  const StarRating = ({ rating }: { rating: number }) => (
+    <div className="flex items-center space-x-0.5">
+       {[1,2,3,4,5].map(s => (
+         <i key={s} className={`fa-solid fa-star text-[8px] ${s <= Math.round(rating) ? 'text-amber-400' : 'text-gray-200 dark:text-slate-800'}`}></i>
+       ))}
+    </div>
+  );
+
   return (
     <div className="pb-20">
-      {/* Tab Controls */}
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h2 className="text-3xl font-black text-gray-900 dark:text-slate-100 uppercase tracking-tight">System Intelligence</h2>
@@ -149,7 +155,6 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
 
       {activeTab === 'analytics' && (
         <div className="space-y-8">
-          {/* Core Analytics View */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[400px]">
                <h3 className="text-sm font-black uppercase text-gray-400 mb-6 flex items-center tracking-widest">
@@ -194,7 +199,6 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                </div>
             </div>
           </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-4 space-y-8">
               <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm space-y-6">
@@ -219,7 +223,6 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                 </div>
               </div>
             </div>
-
             <div className="lg:col-span-8 bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm relative min-h-[500px] flex flex-col">
               {!reportReady ? (
                 <>
@@ -293,9 +296,7 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
 
       {activeTab === 'vendors' && (
         <div className="space-y-8 animate-in fade-in duration-500">
-          {/* Vendor Performance View */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Top Stats */}
             <div className="lg:col-span-8 bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[450px]">
                <h3 className="text-sm font-black uppercase text-gray-400 mb-8 flex items-center tracking-widest">
                  <i className="fa-solid fa-truck-fast mr-2 text-emerald-500"></i> Procurement Volume by Vendor (Kg)
@@ -310,7 +311,6 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                   </BarChart>
                </ResponsiveContainer>
             </div>
-
             <div className="lg:col-span-4 bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[450px] flex flex-col">
                <h3 className="text-sm font-black uppercase text-gray-400 mb-8 flex items-center tracking-widest">
                  <i className="fa-solid fa-clock mr-2 text-blue-500"></i> Fulfillment Score
@@ -346,11 +346,9 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                </div>
             </div>
           </div>
-
-          {/* Vendor Scorecard Table */}
           <div className="bg-white dark:bg-slate-900 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
             <div className="p-8 border-b dark:border-slate-800 flex items-center justify-between">
-               <h3 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Performance Scorecard</h3>
+               <h3 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">System Performance Scorecard</h3>
                <button className="text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:underline">Download Audit Log</button>
             </div>
             <div className="overflow-x-auto">
@@ -358,10 +356,11 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                   <thead className="bg-gray-50 dark:bg-slate-800/50">
                     <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                       <th className="px-8 py-4">Vendor Partner</th>
+                      <th className="px-8 py-4">Rating</th>
                       <th className="px-8 py-4">Avg. Price Paid (₹)</th>
                       <th className="px-8 py-4">Total Volume (Kg)</th>
                       <th className="px-8 py-4">Fulfillment Rate</th>
-                      <th className="px-8 py-4">Performance Status</th>
+                      <th className="px-8 py-4">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y dark:divide-slate-800">
@@ -370,6 +369,12 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                         <td className="px-8 py-6">
                            <p className="text-sm font-black text-gray-900 dark:text-slate-100">{v.name}</p>
                            <p className="text-[9px] text-gray-400 font-bold uppercase mt-1">Bihar State Registered</p>
+                        </td>
+                        <td className="px-8 py-6">
+                           <div className="flex flex-col space-y-1">
+                             <StarRating rating={v.rating} />
+                             <span className="text-[9px] font-black text-gray-500">{v.rating}</span>
+                           </div>
                         </td>
                         <td className="px-8 py-6">
                            <p className="text-sm font-black text-emerald-600">₹ {v.avgPrice.toFixed(2)}</p>
@@ -436,8 +441,6 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
                                <i className={`fa-solid fa-chevron-down text-gray-300 transition-transform ${isExpanded ? 'rotate-180 text-emerald-500' : ''}`}></i>
                             </div>
                          </div>
-                         
-                         {/* Expanded Detail Panel */}
                          <div className={`transition-all duration-300 ${isExpanded ? 'max-h-[800px] border-t dark:border-slate-800 p-8 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                                <div className="space-y-6">
