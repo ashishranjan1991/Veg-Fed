@@ -81,7 +81,14 @@ export const translations = {
     traceability: "Batch Traceability (QR)",
     registerFarmer: "New Farmer Enrolment",
     introTitle: "परिचय-बिहार तरकारी योजना",
-    newsTitle: "समाचार और घोषणाएँ"
+    newsTitle: "समाचार और घोषणाएँ",
+    statFarmers: "Farmers Registered",
+    statDistricts: "Districts Covered",
+    statVegetables: "Vegetable Varieties",
+    statSocieties: "Active Societies",
+    visionTitle: "Our Vision",
+    visionMotto: "Cooperation to Prosperity",
+    visionStatement: "The Cooperative Department, Government of Bihar envisions a vibrant, community-driven cooperative movement that empowers rural communities through participation and shared ownership. Our goal is to strengthen grassroots economic frameworks by promoting inclusivity, transparency and modernization in the cooperative sector. We implement a range of initiatives to achieve this vision, including state-funded programs like Procurement, Bihar Rajya Fasal Sahayata Yojana, Mukhyamantri Harit Krishi Sanyantra Yojana and the Godown Construction Scheme, aimed at agricultural empowerment and rural infrastructure development. To enhance efficiency and transparency, we have introduced computerization of PACS, along with diversification of services such as Common Service Centres, Pradhan Mantri Jan Aushadhi Kendras, Pradhan Mantri Krishak Samriddhi Kendras and Farmer Producer Organizations (FPOs). Additionally, Micro-ATMs are being deployed through M-PACS and M-DCS to ensure doorstep delivery of credit facilities. Guided by the principle of “Cooperation to Prosperity,” we strive to build a modern, inclusive and sustainable cooperative ecosystem for Bihar."
   },
   hi: {
     dashboard: "डैशबोर्ड",
@@ -164,7 +171,14 @@ export const translations = {
     traceability: "बैच ट्रैसेबिलिटी (QR)",
     registerFarmer: "नया किसान नामांकन",
     introTitle: "परिचय-बिहार तरकारी योजना",
-    newsTitle: "समाचार और घोषणाएँ"
+    newsTitle: "समाचार और घोषणाएँ",
+    statFarmers: "पंजीकृत किसान",
+    statDistricts: "कवर किए गए जिले",
+    statVegetables: "सब्जी की किस्में",
+    statSocieties: "सक्रिय समितियां",
+    visionTitle: "हमारा विजन",
+    visionMotto: "सहकार से समृद्धि",
+    visionStatement: "सहकारिता विभाग, बिहार सरकार एक जीवंत, समुदाय-संचालित सहकारी आंदोलन की परिकल्पना करता है जो भागीदारी और साझा स्वामित्व के माध्यम से ग्रामीण समुदायों को सशक्त बनाता है। हमारा लक्ष्य समावेशिता, पारदर्शिता और सहकारी क्षेत्र में आधुनिकीकरण को बढ़ावा देकर जमीनी स्तर के आर्थिक ढांचे को मजबूत करना है। हम इस विजन को प्राप्त करने के लिए कई तरह की पहल करते हैं, जिसमें कृषि सशक्तिकरण और ग्रामीण बुनियादी ढांचे के विकास के उद्देश्य से खरीद, बिहार राज्य फसल सहायता योजना, मुख्यमंत्री हरित कृषि संयंत्र योजना और गोदाम निर्माण योजना जैसे राज्य-वित्तपोषित कार्यक्रम शामिल हैं। दक्षता और पारदर्शिता बढ़ाने के लिए, हमने PACS के कम्प्यूटरीकरण के साथ-साथ सामान्य सेवा केंद्रों (CSC), प्रधानमंत्री जन औषधि केंद्रों, प्रधानमंत्री कृषक समृद्धि केंद्रों और किसान उत्पादक संगठनों (FPO) जैसी सेवाओं का विविधीकरण शुरू किया है। इसके अतिरिक्त, ऋण सुविधाओं की घर-घर डिलीवरी सुनिश्चित करने के लिए M-PACS और M-DCS के माध्यम से माइक्रो-एटीएम तैनात किए जा रहे हैं। 'सहकार से समृद्धि' के सिद्धांत से प्रेरित होकर, हम बिहार के लिए एक आधुनिक, समावेशी और टिकाऊ सहकारी पारिस्थितिकी तंत्र बनाने का प्रयास करते हैं।"
   }
 };
 

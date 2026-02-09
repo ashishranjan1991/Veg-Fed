@@ -66,8 +66,28 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
     { date: "05 Jan 2026", title: "Quality Grading Workshop at Patna Union", desc: "Training for PVCS officials on new digital grading parameters concluded successfully." }
   ];
 
+  const impactStats = [
+    { value: "60,000+", label: t.statFarmers, icon: "fa-users" },
+    { value: "38", label: t.statDistricts, icon: "fa-map-location-dot" },
+    { value: "150+", label: t.statVegetables, icon: "fa-leaf" },
+    { value: "534", label: t.statSocieties, icon: "fa-building-columns" }
+  ];
+
+  const visionPillars = [
+    { title: "Empowerment", icon: "fa-seedling", desc: "Rural communities through shared ownership." },
+    { title: "Transparency", icon: "fa-magnifying-glass-chart", desc: "Digitization of PACS and FPOs." },
+    { title: "Modernization", icon: "fa-microchip", desc: "Micro-ATMs and Jan Aushadhi Kendras." },
+    { title: "Inclusivity", icon: "fa-people-group", desc: "Strengthening grassroots frameworks." }
+  ];
+
   return (
     <div className={`min-h-screen bg-white dark:bg-slate-950 flex flex-col font-size-${fontSize} transition-colors duration-300`}>
+      {/* Official Government Bilingual Masthead */}
+      <div className="bg-emerald-800 text-white py-2 px-6 text-center border-b border-emerald-900 shadow-sm relative z-[60]">
+        <p className="text-[11px] md:text-xs font-black uppercase tracking-tight leading-tight mb-0.5">बिहार राज्य सब्ज़ी प्रसंस्करण एवं विपणन सहकारी फेडरेशन लि. पटना</p>
+        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-80">Bihar State Vegetable Processing and Marketing Co-operative Federation Ltd. Patna</p>
+      </div>
+
       {/* Public Header */}
       <header role="banner" className="bg-white dark:bg-slate-900 border-b dark:border-slate-800 py-3 sticky top-0 z-50 transition-colors shadow-sm">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
@@ -185,9 +205,9 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
            <div className="relative">
               <div className="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-gray-50 dark:border-slate-800">
-                 <img src="https://tarkaari.in/Photo/slide_10.jpg" className="w-full h-full object-cover" alt="Bihar Cooperative Vision" />
+                 <img src="https://tarkaari.in/Photo/slide_12.jpg" className="w-full h-full object-cover" alt="Bihar Cooperative Vision" />
               </div>
-              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-emerald-600 rounded-[3rem] p-8 text-white shadow-2xl animate-bounce-slow flex flex-col justify-center">
+              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-emerald-600 rounded-[3rem] p-8 text-white shadow-2xl animate-bounce-slow flex flex-col justify-center text-center">
                  <p className="text-4xl font-black">20+</p>
                  <p className="text-[10px] font-bold uppercase tracking-widest mt-2">Years of Legacy</p>
               </div>
@@ -222,8 +242,40 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         </div>
       </section>
 
+      {/* DEPARTMENT VISION SECTION - NEW */}
+      <section className="py-32 px-6 bg-gray-50 dark:bg-slate-950 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center max-w-4xl mx-auto mb-20">
+             <span className="text-emerald-600 font-black text-xs uppercase tracking-[0.4em] block mb-6">{t.visionTitle}</span>
+             <h3 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tighter mb-8 italic">"{t.visionMotto}"</h3>
+             <div className="w-24 h-1.5 bg-emerald-500 mx-auto rounded-full mb-12"></div>
+             <p className="text-gray-700 dark:text-slate-300 text-xl md:text-2xl leading-relaxed font-bold italic opacity-90">
+                {t.visionStatement}
+             </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+             {visionPillars.map((p, i) => (
+                <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border-2 border-transparent hover:border-emerald-500 transition-all shadow-xl hover:shadow-2xl group text-center">
+                   <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-950 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
+                      <i className={`fa-solid ${p.icon}`}></i>
+                   </div>
+                   <h4 className="text-lg font-black text-gray-900 dark:text-white uppercase mb-2">{p.title}</h4>
+                   <p className="text-xs text-gray-500 dark:text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
+                      {p.desc}
+                   </p>
+                </div>
+             ))}
+          </div>
+        </div>
+        
+        {/* Decorative Vision background elements */}
+        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+      </section>
+
       {/* Brand Values - VEGFED Promise */}
-      <section className="py-24 px-6 bg-slate-50 dark:bg-slate-950">
+      <section className="py-24 px-6 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
             <div className="max-w-2xl text-left">
@@ -239,7 +291,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
                { title: 'Quality Graded', icon: 'fa-microscope', desc: 'Every batch undergoes rigorous quality checks using digital grading parameters.' },
                { title: 'Rapid Logistics', icon: 'fa-truck-fast', desc: 'Harvest to retail cycle completed within 12-18 hours for maximum nutrient retention.' }
              ].map((val, i) => (
-               <div key={i} className="bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] border dark:border-slate-800 shadow-sm hover:shadow-xl transition-all group">
+               <div key={i} className="bg-white dark:bg-slate-950 p-10 rounded-[2.5rem] border dark:border-slate-800 shadow-sm hover:shadow-xl transition-all group">
                   <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                     <i className={`fa-solid ${val.icon}`}></i>
                   </div>
@@ -252,7 +304,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
       </section>
 
       {/* Union Reach Map Visualization */}
-      <section className="py-24 px-6 bg-white dark:bg-slate-900">
+      <section className="py-24 px-6 bg-gray-50 dark:bg-slate-950">
         <div className="max-w-7xl mx-auto">
            <div className="text-center mb-20">
               <h3 className="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-wider">Our Union Network</h3>
@@ -260,7 +312,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
            </div>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {unions.map((union, i) => (
-                <div key={i} className="group p-8 rounded-[2rem] border-2 border-gray-50 dark:border-slate-800 hover:border-emerald-500 transition-all text-center bg-white dark:bg-slate-900 cursor-default">
+                <div key={i} className="group p-8 rounded-[2rem] border-2 border-transparent bg-white dark:bg-slate-900 hover:border-emerald-500 transition-all text-center cursor-default shadow-sm hover:shadow-xl">
                   <div className="w-14 h-14 bg-gray-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6 text-xl font-black text-gray-400 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                     {union.logo}
                   </div>
@@ -273,7 +325,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
       </section>
 
       {/* समाचार और घोषणाएँ (News & Announcements) */}
-      <section className="py-24 px-6 bg-slate-50 dark:bg-slate-950">
+      <section className="py-24 px-6 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
            <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-6">
               <div className="text-left">
@@ -285,7 +337,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
 
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {newsItems.map((news, i) => (
-                <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col group">
+                <div key={i} className="bg-white dark:bg-slate-950 p-8 rounded-[2rem] border dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col group">
                    <div className="flex items-center justify-between mb-6">
                       <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded uppercase tracking-widest">{news.date}</span>
                       <i className="fa-solid fa-bullhorn text-gray-200 group-hover:text-emerald-500 transition-colors"></i>
@@ -301,6 +353,23 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         </div>
       </section>
 
+      {/* Impact Numbers Section */}
+      <section className="py-20 px-6 bg-emerald-950 text-white overflow-hidden relative border-t-4 border-emerald-400">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16">
+          {impactStats.map((stat, i) => (
+            <div key={i} className="flex flex-col items-center text-center group">
+               <div className="w-16 h-16 bg-emerald-800/50 rounded-2xl flex items-center justify-center text-2xl text-emerald-400 mb-6 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-xl">
+                  <i className={`fa-solid ${stat.icon}`}></i>
+               </div>
+               <p className="text-4xl lg:text-5xl font-black mb-2 tracking-tighter drop-shadow-md">{stat.value}</p>
+               <p className="text-[10px] lg:text-xs font-black uppercase tracking-[0.2em] text-emerald-400/80">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-400/5 rounded-full -ml-32 -mb-32 blur-3xl"></div>
+      </section>
+
       {/* Footer */}
       <footer role="contentinfo" className="bg-slate-950 text-slate-500 pt-24 pb-12 px-6 border-t-[12px] border-emerald-600">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-16">
@@ -313,7 +382,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
             <div className="flex space-x-4">
                {['facebook', 'twitter', 'instagram'].map(s => (
                  <a key={s} href="#" aria-label={`Link to ${s}`} className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center hover:text-emerald-500 transition-colors">
-                   <i className={`fa-brands fa-${s}`}></i>
+                   <i className={`fa-solid fa-envelope text-xs`}></i>
                  </a>
                ))}
             </div>
