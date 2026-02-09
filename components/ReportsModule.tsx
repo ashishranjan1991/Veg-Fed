@@ -104,7 +104,8 @@ const ReportsModule: React.FC<ReportsModuleProps> = ({ role, language }) => {
     setExpandedTicketId(expandedTicketId === id ? null : id);
   };
 
-  const FilterSection = ({ title, icon, children }: { title: string; icon: string; children: React.ReactNode }) => (
+  // Fixed FilterSection component with proper React.FC type to handle children correctly in TS
+  const FilterSection: React.FC<{ title: string; icon: string; children: React.ReactNode }> = ({ title, icon, children }) => (
     <div className="space-y-3">
       <div className="flex items-center space-x-2 text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
         <i className={`fa-solid ${icon}`}></i>

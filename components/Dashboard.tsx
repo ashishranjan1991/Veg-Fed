@@ -41,9 +41,9 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm">
-           <h3 className="text-xl font-black mb-6 flex items-center dark:text-slate-100">
+           <h3 className="text-xl font-black mb-6 flex items-center dark:text-slate-100 uppercase tracking-tight">
              <i className="fa-solid fa-chart-line text-emerald-600 mr-3"></i>
-             Live Central Market Rates (Today)
+             Live Market Rates (Farmer Price)
            </h3>
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {['Tomato', 'Potato', 'Onion', 'Brinjal'].map(item => (
@@ -68,61 +68,35 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
     </div>
   );
 
+  // Added renderPVCSDash to fix missing reference error
   const renderPVCSDash = () => (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Procured Today" value="2.4 Tons" icon="fa-truck-ramp-box" color="text-blue-600" trend="On Target" />
-        <StatCard title="Active Farmers" value="1,245" icon="fa-people-group" color="text-emerald-600" />
-        <StatCard title="Quality Alerts" value="03" icon="fa-triangle-exclamation" color="text-amber-600" trend="Critical" />
-        <div className="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm flex items-center space-x-4">
-           <div className="w-12 h-12 rounded-2xl bg-emerald-900/30 flex items-center justify-center text-2xl text-emerald-500">
-              <i className="fa-solid fa-server"></i>
-           </div>
-           <div>
-              <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest leading-none">MySQL Sync Status</p>
-              <p className="text-sm font-bold text-emerald-400 mt-1">Cloud Online</p>
-           </div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard title="Procurement (Today)" value="4.2 Tons" icon="fa-truck-ramp-box" color="text-emerald-600" trend="+5%" />
+        <StatCard title="Active Farmers" value="128" icon="fa-users" color="text-blue-600" />
+        <StatCard title="Inventory Value" value="₹ 2.1 Lakh" icon="fa-warehouse" color="text-amber-600" />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm h-[400px]">
-          <h3 className="text-lg font-black mb-6 uppercase tracking-tight dark:text-slate-100">Weekly Local Collection (Kg)</h3>
-          <ResponsiveContainer width="100%" height="85%">
-            <BarChart data={procurementData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
-              <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} dy={10} />
-              <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px', color: '#f1f5f9' }}
-                cursor={{ fill: 'rgba(16, 185, 129, 0.05)' }}
-              />
-              <Bar dataKey="qty" fill="#10b981" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-black uppercase tracking-tight dark:text-slate-100">Live Queue (PVCS Center)</h3>
-            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase">Realtime</span>
-          </div>
-          <div className="space-y-4">
-            {['Ram Mehto', 'Sunil Jha', 'Anita Devi'].map((name, i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-slate-800/50 rounded-2xl border border-gray-50 dark:border-slate-800 group transition-all hover:translate-x-1">
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm">
+         <h3 className="text-xl font-black mb-6 flex items-center dark:text-slate-100 uppercase tracking-tight">
+           <i className="fa-solid fa-clock-rotate-left text-emerald-600 mr-3"></i>
+           Recent Procurement Activity
+         </h3>
+         <div className="space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-slate-800/50 rounded-2xl border dark:border-slate-700">
                 <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded-xl flex items-center justify-center font-black text-xs">#{1020 + i}</div>
+                  <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600">
+                    <i className="fa-solid fa-leaf"></i>
+                  </div>
                   <div>
-                    <p className="text-sm font-black dark:text-slate-200">{name}</p>
-                    <p className="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase">Tomato • Grade A • 45Kg</p>
+                    <p className="font-bold text-sm dark:text-white">Farmer Transaction #{1000 + i}</p>
+                    <p className="text-[10px] text-gray-400 uppercase font-black">250 Kg • Tomato Grade A</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-black text-gray-900 dark:text-slate-100">₹ {(Math.random() * 2000 + 1000).toFixed(0)}</p>
-                  <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-tight">Verified</p>
-                </div>
+                <span className="font-black text-emerald-600">₹ 6,625</span>
               </div>
             ))}
-          </div>
-        </div>
+         </div>
       </div>
     </div>
   );
@@ -140,7 +114,7 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
          <div className="lg:col-span-8 bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
               <h3 className="text-xl font-black uppercase tracking-tight dark:text-slate-100 text-gray-900">Regional Union Performance</h3>
-              <select className="bg-gray-50 dark:bg-slate-800 border-none rounded-xl text-[10px] font-black uppercase p-3 outline-none dark:text-slate-300">
+              <select aria-label="Sort Performance" className="bg-gray-50 dark:bg-slate-800 border-none rounded-xl text-[10px] font-black uppercase p-3 outline-none dark:text-slate-300">
                 <option>Volume: High to Low</option>
                 <option>Efficiency: High to Low</option>
               </select>
@@ -164,24 +138,45 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
             </div>
          </div>
 
-         <div className="lg:col-span-4 bg-slate-900 p-10 rounded-[3rem] text-white flex flex-col justify-between">
-            <div className="space-y-6">
-              <h4 className="text-2xl font-black leading-tight">Master Price Control</h4>
-              <p className="text-sm text-slate-400 font-medium leading-relaxed">System-wide prices were last synchronized 4 hours ago. Next scheduled push to PVCS nodes at 08:00 AM IST.</p>
-              <div className="space-y-4">
-                 {['Tomato', 'Onion'].map(item => (
-                   <div key={item} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-slate-700/50">
-                     <span className="font-bold text-sm">{item}</span>
-                     <span className="text-emerald-400 font-black">₹ 26.50</span>
-                   </div>
-                 ))}
+         <div className="lg:col-span-4 flex flex-col gap-6">
+            <div className="bg-slate-900 p-10 rounded-[3rem] text-white flex flex-col justify-between flex-1">
+              <div className="space-y-6">
+                <h4 className="text-2xl font-black leading-tight uppercase tracking-tight">Master Price Control</h4>
+                <p className="text-sm text-slate-400 font-medium leading-relaxed">System-wide prices last synced 4h ago. Next push to PVCS at 08:00 AM IST.</p>
+                <div className="space-y-4">
+                  {['Tomato', 'Onion'].map(item => (
+                    <div key={item} className="flex items-center justify-between p-4 bg-slate-800/50 rounded-2xl border border-slate-700/50">
+                      <span className="font-bold text-sm">{item}</span>
+                      <span className="text-emerald-400 font-black">₹ 26.50</span>
+                    </div>
+                  ))}
+                </div>
               </div>
+              <button className="mt-8 bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-emerald-950/40">Open Price Master</button>
             </div>
-            <button className="mt-8 bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all">Go to Price Master</button>
+            
+            {/* Tarkaari Consumer Price Comparison - NEW */}
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border-4 border-emerald-500/20 shadow-sm relative overflow-hidden group hover:border-emerald-500 transition-all duration-500">
+               <h4 className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-6">Tarkaari Price Benefit</h4>
+               <div className="space-y-4">
+                  <div className="flex justify-between items-end border-b pb-4 dark:border-slate-800">
+                     <span className="text-[10px] font-black text-gray-400 uppercase">Open Market Avg.</span>
+                     <span className="text-lg font-black text-red-500">₹ 42.00</span>
+                  </div>
+                  <div className="flex justify-between items-end border-b pb-4 dark:border-slate-800">
+                     <span className="text-[10px] font-black text-gray-400 uppercase">Tarkaari Mart</span>
+                     <span className="text-lg font-black text-emerald-600">₹ 35.00</span>
+                  </div>
+                  <div className="bg-emerald-50 dark:bg-emerald-900/30 p-3 rounded-xl text-center">
+                     <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase">Consumer Savings: 16.5%</p>
+                  </div>
+               </div>
+               <i className="fa-solid fa-basket-shopping absolute -bottom-8 -right-8 text-[100px] text-emerald-50 dark:text-slate-800/50 -rotate-12 transition-transform group-hover:scale-110"></i>
+            </div>
          </div>
       </div>
 
-      {/* NEW: Top PVCS Performance Section */}
+      {/* Top PVCS Nodes */}
       <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
           <div>
@@ -238,6 +233,7 @@ const Dashboard: React.FC<DashboardProps> = ({ role, language }) => {
   const renderContent = () => {
     switch(role) {
       case UserRole.FARMER: return renderFarmerDash();
+      // Updated PVCS_USER case to call renderPVCSDash()
       case UserRole.PVCS_USER: return renderPVCSDash();
       case UserRole.ADMIN:
       case UserRole.DEPT_OFFICIAL:

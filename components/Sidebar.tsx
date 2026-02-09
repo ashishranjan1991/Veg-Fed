@@ -15,11 +15,10 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ role, activeTab, setActiveTab, onRoleSwitch, onLogout, language }) => {
   const t = translations[language];
 
-  // Logic to determine Level display in sidebar
   const getLevelLabel = () => {
-    if (role === UserRole.FARMER) return "Level 1: Producer";
-    if (role === UserRole.PVCS_USER) return "Level 2: Primary Coop";
-    return "Level 3: State Federation";
+    if (role === UserRole.FARMER) return "Farmer Access";
+    if (role === UserRole.PVCS_USER) return "Primary Cooperative (L2)";
+    return "State Federation (L3)";
   };
 
   const menuItems = [
@@ -37,68 +36,81 @@ const Sidebar: React.FC<SidebarProps> = ({ role, activeTab, setActiveTab, onRole
   ];
 
   return (
-    <div className="w-72 bg-slate-900 dark:bg-slate-900 text-white flex flex-col h-full sticky top-0 transition-all duration-300">
+    <nav 
+      role="navigation" 
+      aria-label="Main Menu"
+      className="w-72 bg-slate-900 dark:bg-slate-900 text-white flex flex-col h-full sticky top-0 transition-all duration-300 border-r border-slate-800"
+    >
       <div className="p-8 flex items-center space-x-4">
-        <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-2xl font-black shadow-xl shadow-emerald-500/20">V</div>
+        <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-2xl font-black shadow-xl shadow-emerald-900/40" aria-hidden="true">
+          <i className="fa-solid fa-leaf"></i>
+        </div>
         <div>
-          <h1 className="text-xl font-black leading-none tracking-tight">VEGFED</h1>
-          <p className="text-[9px] text-slate-500 mt-1 uppercase font-black tracking-[0.2em]">{getLevelLabel()}</p>
+          <h1 className="text-xl font-black leading-none tracking-tight">TARKAARI</h1>
+          <p className="text-[9px] text-emerald-500 mt-1 uppercase font-black tracking-[0.2em]">{getLevelLabel()}</p>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 mt-6 space-y-2 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 px-4 mt-6 space-y-1 overflow-y-auto custom-scrollbar" role="tablist" aria-orientation="vertical">
         {menuItems
           .filter(item => item.roles.includes(role))
           .map(item => (
             <button
               key={item.id}
+              role="tab"
+              aria-selected={activeTab === item.id}
+              aria-current={activeTab === item.id ? 'page' : undefined}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center space-x-4 px-5 py-4 rounded-2xl transition-all ${
+              className={`w-full flex items-center space-x-4 px-5 py-3.5 rounded-2xl transition-all ${
                 activeTab === item.id 
-                ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-900/40 translate-x-1' 
-                : 'text-slate-500 hover:bg-slate-800 hover:text-slate-300'
+                ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-900/40' 
+                : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
               }`}
             >
-              <i className={`fa-solid ${item.icon} text-lg`}></i>
+              <i className={`fa-solid ${item.icon} text-lg w-6`} aria-hidden="true"></i>
               <span className="font-bold text-sm tracking-tight">{item.label}</span>
             </button>
           ))}
-      </nav>
+      </div>
 
       <div className="px-6 py-4 mt-auto border-t border-slate-800/50">
         <button 
           onClick={onLogout}
+          aria-label="Logout"
           className="w-full flex items-center space-x-4 px-5 py-4 rounded-2xl text-slate-500 hover:bg-red-900/20 hover:text-red-400 transition-colors"
         >
-          <i className="fa-solid fa-right-from-bracket text-lg"></i>
+          <i className="fa-solid fa-right-from-bracket text-lg" aria-hidden="true"></i>
           <span className="font-bold text-sm">{t.logout}</span>
         </button>
       </div>
 
-      <div className="p-6 bg-slate-800/30 m-6 rounded-3xl border border-slate-700/30">
-        <label className="block text-[10px] uppercase font-black text-slate-600 mb-3 tracking-widest">{t.switchTier}</label>
-        <div className="grid grid-cols-1 gap-2">
+      <div className="p-6 bg-slate-800/20 m-6 rounded-[2rem] border border-slate-700/30">
+        <label id="tier-switch-label" className="block text-[9px] uppercase font-black text-slate-600 mb-3 tracking-widest">{t.switchTier}</label>
+        <div className="grid grid-cols-1 gap-1.5" role="group" aria-labelledby="tier-switch-label">
           <button 
             onClick={() => onRoleSwitch(UserRole.FARMER)} 
-            className={`w-full text-left p-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors ${role === UserRole.FARMER ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-500 hover:text-white'}`}
+            aria-pressed={role === UserRole.FARMER}
+            className={`w-full text-left px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${role === UserRole.FARMER ? 'bg-emerald-600 text-white shadow-lg' : 'bg-slate-900 text-slate-500 hover:text-white'}`}
           >
             Tier 1: Farmer
           </button>
           <button 
             onClick={() => onRoleSwitch(UserRole.PVCS_USER)} 
-            className={`w-full text-left p-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors ${role === UserRole.PVCS_USER ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-500 hover:text-white'}`}
+            aria-pressed={role === UserRole.PVCS_USER}
+            className={`w-full text-left px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${role === UserRole.PVCS_USER ? 'bg-emerald-600 text-white shadow-lg' : 'bg-slate-900 text-slate-500 hover:text-white'}`}
           >
             Tier 2: PVCS
           </button>
           <button 
             onClick={() => onRoleSwitch(UserRole.DEPT_OFFICIAL)} 
-            className={`w-full text-left p-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors ${role === UserRole.DEPT_OFFICIAL ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-500 hover:text-white'}`}
+            aria-pressed={role === UserRole.DEPT_OFFICIAL}
+            className={`w-full text-left px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${role === UserRole.DEPT_OFFICIAL ? 'bg-emerald-600 text-white shadow-lg' : 'bg-slate-900 text-slate-500 hover:text-white'}`}
           >
             Tier 3: State
           </button>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
