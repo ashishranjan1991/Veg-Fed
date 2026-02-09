@@ -14,6 +14,7 @@ import MasterDataModule from './components/MasterDataModule';
 import ReportsModule from './components/ReportsModule';
 import ProjectManagementModule from './components/ProjectManagementModule';
 import MarketingECommerceModule from './components/MarketingECommerceModule';
+import UserManagementModule from './components/UserManagementModule';
 import Home from './components/Home';
 import { Language, FontSize } from './translations';
 
@@ -67,6 +68,8 @@ const App: React.FC = () => {
     switch (activeTab) {
       case 'dashboard':
         return <Dashboard role={currentRole} language={language} />;
+      case 'user-mgmt':
+        return <UserManagementModule role={currentRole} />;
       case 'master-data':
         return <MasterDataModule role={currentRole} language={language} />;
       case 'farmers':

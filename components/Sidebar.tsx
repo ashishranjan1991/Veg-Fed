@@ -24,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role, activeTab, setActiveTab, onRole
 
   const menuItems = [
     { id: 'dashboard', label: t.dashboard, icon: 'fa-gauge-high', roles: Object.values(UserRole) },
+    { id: 'user-mgmt', label: t.userMgmt, icon: 'fa-user-gear', roles: [UserRole.ADMIN, UserRole.DEPT_OFFICIAL, UserRole.UNION_USER] },
     { id: 'master-data', label: t.masterData, icon: 'fa-database', roles: [UserRole.ADMIN, UserRole.DEPT_OFFICIAL, UserRole.PVCS_USER] },
     { id: 'farmers', label: t.membership, icon: 'fa-users', roles: Object.values(UserRole) },
     { id: 'land-crop', label: t.landCrops, icon: 'fa-map-location-dot', roles: [UserRole.PVCS_USER, UserRole.ADMIN, UserRole.FARMER] },

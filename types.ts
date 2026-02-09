@@ -35,7 +35,8 @@ export interface ProcurementEntry {
   id: string;
   farmerName: string;
   vendorId?: string; 
-  sourceType: 'Farmer' | 'Vendor' | 'Aggregator';
+  // Fix: Added 'Union' to the union type to support district union transactions in the ERP workflow
+  sourceType: 'Farmer' | 'Vendor' | 'Aggregator' | 'Union';
   location: string;
   vegetable: string;
   quantity: number;
