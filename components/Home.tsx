@@ -31,6 +31,9 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
     message: ''
   });
 
+  const logoUrl = "https://tarkaari.in/assets/img/logo-veg.png";
+  const heroImageUrl = "https://tarkaari.in/Photo/slide_12.jpg";
+
   const handleFeedbackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFeedbackSent(true);
@@ -56,14 +59,21 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
     { name: 'सारण (Saran)', location: 'Chapra', logo: 'R' }
   ];
 
+  const newsItems = [
+    { date: "12 Jan 2026", title: "Kharif Subsidy Registration Now Open", desc: "Farmers can now register for the upcoming season incentives via the portal." },
+    { date: "10 Jan 2026", title: "New PVCS Center Inaugurated in Gaya", desc: "Hon'ble Minister of Cooperatives inaugurated the 15th center in Magadh Union." },
+    { date: "08 Jan 2026", title: "Tomato Exports to Nepal Begin", desc: "Tarkaari brand produce from Tirhut Union has successfully crossed borders for retail." },
+    { date: "05 Jan 2026", title: "Quality Grading Workshop at Patna Union", desc: "Training for PVCS officials on new digital grading parameters concluded successfully." }
+  ];
+
   return (
     <div className={`min-h-screen bg-white dark:bg-slate-950 flex flex-col font-size-${fontSize} transition-colors duration-300`}>
       {/* Public Header */}
       <header role="banner" className="bg-white dark:bg-slate-900 border-b dark:border-slate-800 py-3 sticky top-0 z-50 transition-colors shadow-sm">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
           <div className="flex items-center space-x-3 md:space-x-4 shrink-0">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-lg" aria-hidden="true">
-              <i className="fa-solid fa-leaf"></i>
+            <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center p-1 bg-white dark:bg-slate-800 rounded-full shadow-sm" aria-hidden="true">
+              <img src={logoUrl} alt="Tarkaari Logo" className="w-full h-full object-contain" />
             </div>
             <div className="hidden sm:block">
               <h1 className="text-xs md:text-sm font-black text-emerald-800 dark:text-emerald-400 leading-tight uppercase tracking-tight">TARKAARI.IN</h1>
@@ -103,25 +113,34 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-emerald-800 to-emerald-950 py-20 px-6 overflow-hidden">
+      <section className="relative py-20 px-6 overflow-hidden min-h-[600px] flex items-center">
+        {/* Hero Background Image Layer */}
+        <div className="absolute inset-0 z-0">
+          <img src={heroImageUrl} className="w-full h-full object-cover" alt="Bihar Fresh Vegetables" />
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/95 via-emerald-900/80 to-emerald-950/95"></div>
+        </div>
+
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           <div className="lg:col-span-7 text-white animate-in fade-in slide-in-from-left-8 duration-700">
-            <span className="inline-block bg-white/10 border border-white/20 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase mb-6">बिहार राज्य सब्जी प्रसंस्करण एवं विपणन योजना</span>
-            <h2 className="text-5xl lg:text-8xl font-black mb-8 leading-none tracking-tighter">{t.slogan}</h2>
+            <span className="inline-flex items-center space-x-3 bg-emerald-600/30 backdrop-blur-md border border-emerald-400/30 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase mb-6 shadow-xl">
+               <img src={logoUrl} className="w-4 h-4 object-contain" alt="" />
+               <span className="text-emerald-100">बिहार राज्य सब्जी प्रसंस्करण एवं विपणन योजना</span>
+            </span>
+            <h2 className="text-5xl lg:text-8xl font-black mb-8 leading-none tracking-tighter drop-shadow-2xl">{t.slogan}</h2>
             <div className="flex space-x-4 mb-10">
-               <div className="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-xl border border-white/10">
+               <div className="flex items-center space-x-2 bg-emerald-900/40 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/10 shadow-lg">
                   <i className="fa-solid fa-check-circle text-emerald-400"></i>
-                  <span className="text-xs font-bold">100% Traceable</span>
+                  <span className="text-xs font-bold text-white">100% Traceable</span>
                </div>
-               <div className="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-xl border border-white/10">
+               <div className="flex items-center space-x-2 bg-emerald-900/40 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/10 shadow-lg">
                   <i className="fa-solid fa-leaf text-emerald-400"></i>
-                  <span className="text-xs font-bold">Fresh Harvest</span>
+                  <span className="text-xs font-bold text-white">Fresh Harvest</span>
                </div>
             </div>
           </div>
 
           <div className="lg:col-span-5 animate-in fade-in slide-in-from-right-8 duration-700">
-            <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-10 shadow-2xl border-4 border-emerald-500/10 transition-colors">
+            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-[3rem] p-10 shadow-2xl border-4 border-emerald-500/20 transition-colors">
               <div className="flex bg-gray-100 dark:bg-slate-800 p-1.5 rounded-2xl mb-8" role="tablist">
                 <button onClick={() => setTab('login')} role="tab" aria-selected={tab === 'login'} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'login' ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-400'}`}>{t.signIn}</button>
                 <button onClick={() => setTab('register')} role="tab" aria-selected={tab === 'register'} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'register' ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm' : 'text-gray-400'}`}>{t.joinCooperative}</button>
@@ -135,11 +154,11 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
                   </div>
                   <div>
                     <label htmlFor="login-id" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.userId}</label>
-                    <input id="login-id" type="text" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                    <input id="login-id" type="text" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
                   </div>
                   <div>
                     <label htmlFor="login-pwd" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.password}</label>
-                    <input id="login-pwd" type="password" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                    <input id="login-pwd" type="password" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
                   </div>
                   <button onClick={() => onLogin(loginRole)} aria-label="Login" className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 shadow-xl transition-all">
                     {t.loginButton}
@@ -149,7 +168,7 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="reg-dbt" className="text-[10px] font-black text-gray-400 uppercase ml-1 tracking-widest">{t.dbtNumber}</label>
-                    <input id="reg-dbt" type="text" value={dbtId} onChange={e => setDbtId(e.target.value)} placeholder="e.g. 231XXXXXXXX" className="w-full bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
+                    <input id="reg-dbt" type="text" value={dbtId} onChange={e => setDbtId(e.target.value)} placeholder="e.g. 231XXXXXXXX" className="w-full bg-gray-50/50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-5 py-4 mt-1 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white" />
                   </div>
                   <button onClick={() => setOtpSent(true)} className="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 shadow-xl">
                     {otpSent ? t.verifyButton : t.startRegistration}
@@ -159,7 +178,48 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
             </div>
           </div>
         </div>
-        <i className="fa-solid fa-leaf absolute -bottom-20 -right-20 text-[400px] text-white/5 -rotate-12 pointer-events-none"></i>
+      </section>
+
+      {/* परिचय-बिहार तरकारी योजना (Introduction Section) */}
+      <section className="py-24 px-6 bg-white dark:bg-slate-900 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+           <div className="relative">
+              <div className="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-gray-50 dark:border-slate-800">
+                 <img src="https://tarkaari.in/Photo/slide_10.jpg" className="w-full h-full object-cover" alt="Bihar Cooperative Vision" />
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-emerald-600 rounded-[3rem] p-8 text-white shadow-2xl animate-bounce-slow flex flex-col justify-center">
+                 <p className="text-4xl font-black">20+</p>
+                 <p className="text-[10px] font-bold uppercase tracking-widest mt-2">Years of Legacy</p>
+              </div>
+           </div>
+           <div className="space-y-8">
+              <span className="text-emerald-600 font-black text-xs uppercase tracking-[0.4em] block">{language === 'hi' ? 'संक्षिप्त विवरण' : 'Overview'}</span>
+              <h3 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white uppercase tracking-tight leading-none">{t.introTitle}</h3>
+              <p className="text-gray-600 dark:text-slate-400 text-lg leading-relaxed font-medium">
+                बिहार राज्य सब्जी प्रसंस्करण एवं विपणन सहकारी फेडरेशन लिमिटेड (VEGFED) राज्य के सब्जी उत्पादकों के लिए एक सुव्यवस्थित 3-स्तरीय सहकारी ढांचा प्रदान करता है। हमारा मुख्य उद्देश्य बिचौलियों को समाप्त करना, किसानों को उनके उत्पादन का उचित मूल्य दिलाना और उपभोक्ताओं को 'तरकारी' ब्रांड के तहत ताजी और गुणवत्तापूर्ण सब्जियां उपलब्ध कराना है।
+              </p>
+              <div className="grid grid-cols-2 gap-6 pt-4">
+                 <div className="flex items-start space-x-4">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center shrink-0">
+                       <i className="fa-solid fa-users-gear"></i>
+                    </div>
+                    <div>
+                       <h5 className="font-black text-gray-900 dark:text-white uppercase text-xs">सहकारी ढांचा</h5>
+                       <p className="text-[10px] text-gray-500 mt-1">3-स्तरीय सुदृढ़ प्रबंधन प्रणाली</p>
+                    </div>
+                 </div>
+                 <div className="flex items-start space-x-4">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center shrink-0">
+                       <i className="fa-solid fa-indian-rupee-sign"></i>
+                    </div>
+                    <div>
+                       <h5 className="font-black text-gray-900 dark:text-white uppercase text-xs">उचित मूल्य</h5>
+                       <p className="text-[10px] text-gray-500 mt-1">पारदर्शी डिजिटल भुगतान प्रणाली</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
       </section>
 
       {/* Brand Values - VEGFED Promise */}
@@ -212,13 +272,42 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
         </div>
       </section>
 
+      {/* समाचार और घोषणाएँ (News & Announcements) */}
+      <section className="py-24 px-6 bg-slate-50 dark:bg-slate-950">
+        <div className="max-w-7xl mx-auto">
+           <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-6">
+              <div className="text-left">
+                <span className="text-emerald-600 font-black text-xs uppercase tracking-[0.4em] mb-4 block">{language === 'hi' ? 'ताजा अपडेट' : 'Latest Updates'}</span>
+                <h3 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white uppercase tracking-tight leading-none">{t.newsTitle}</h3>
+              </div>
+              <button className="px-8 py-3 border-2 border-emerald-600 text-emerald-600 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all">View All News</button>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {newsItems.map((news, i) => (
+                <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col group">
+                   <div className="flex items-center justify-between mb-6">
+                      <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded uppercase tracking-widest">{news.date}</span>
+                      <i className="fa-solid fa-bullhorn text-gray-200 group-hover:text-emerald-500 transition-colors"></i>
+                   </div>
+                   <h4 className="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4 leading-tight">{news.title}</h4>
+                   <p className="text-sm text-gray-500 dark:text-slate-400 font-medium leading-relaxed mb-6 flex-1">{news.desc}</p>
+                   <a href="#" className="text-[10px] font-black uppercase text-emerald-600 tracking-widest flex items-center hover:translate-x-1 transition-transform">
+                     Read More <i className="fa-solid fa-arrow-right ml-2"></i>
+                   </a>
+                </div>
+              ))}
+           </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer role="contentinfo" className="bg-slate-950 text-slate-500 pt-24 pb-12 px-6 border-t-[12px] border-emerald-600">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-16">
           <div className="lg:col-span-1 space-y-8">
             <div className="flex items-center space-x-3 text-white">
-               <i className="fa-solid fa-leaf text-3xl text-emerald-500"></i>
-               <span className="font-black text-2xl uppercase tracking-tighter">TARKAARI</span>
+               <img src={logoUrl} className="w-14 h-14 object-contain" alt="Tarkaari Official Logo" />
+               <span className="font-black text-3xl uppercase tracking-tighter">TARKAARI</span>
             </div>
             <p className="text-xs font-medium leading-relaxed uppercase tracking-widest">Fresh from the fields of Bihar, delivered with integrity.</p>
             <div className="flex space-x-4">
@@ -252,11 +341,14 @@ const Home: React.FC<HomeProps> = ({ onLogin, language, setLanguage, fontSize, s
           </div>
         </div>
         <div className="max-w-7xl mx-auto border-t border-slate-900 mt-20 pt-12 flex flex-col md:flex-row items-center justify-between gap-4">
-           <p className="text-[10px] uppercase font-black tracking-widest text-slate-700">© 2025 VEGFED BIHAR | TARKAARI.IN</p>
+           <div className="flex items-center space-x-4 opacity-50 grayscale hover:grayscale-0 transition-all">
+              <img src={logoUrl} className="w-8 h-8 object-contain" alt="" />
+              <p className="text-[10px] uppercase font-black tracking-widest text-slate-700">© 2025 VEGFED BIHAR | TARKAARI.IN</p>
+           </div>
            <p className="text-[10px] uppercase font-black tracking-widest text-slate-700">Designed for Bihar Farmers</p>
         </div>
       </footer>
-      <style dangerouslySetInnerHTML={{ __html: `@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } .animate-marquee { display: inline-block; animation: marquee 30s linear infinite; }` }} />
+      <style dangerouslySetInnerHTML={{ __html: `@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } .animate-marquee { display: inline-block; animation: marquee 30s linear infinite; } @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); } 50% { transform: translateY(0); } } .animate-bounce-slow { animation: bounce-slow 4s ease-in-out infinite; }` }} />
     </div>
   );
 };

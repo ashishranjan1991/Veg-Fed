@@ -14,6 +14,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ role, activeTab, setActiveTab, onRoleSwitch, onLogout, language }) => {
   const t = translations[language];
+  const logoUrl = "https://tarkaari.in/assets/img/logo-veg.png";
 
   const getLevelLabel = () => {
     if (role === UserRole.FARMER) return "Farmer Access";
@@ -42,8 +43,8 @@ const Sidebar: React.FC<SidebarProps> = ({ role, activeTab, setActiveTab, onRole
       className="w-72 bg-slate-900 dark:bg-slate-900 text-white flex flex-col h-full sticky top-0 transition-all duration-300 border-r border-slate-800"
     >
       <div className="p-8 flex items-center space-x-4">
-        <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-2xl font-black shadow-xl shadow-emerald-900/40" aria-hidden="true">
-          <i className="fa-solid fa-leaf"></i>
+        <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center p-1.5 shadow-xl shadow-emerald-900/40" aria-hidden="true">
+          <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
         </div>
         <div>
           <h1 className="text-xl font-black leading-none tracking-tight">TARKAARI</h1>

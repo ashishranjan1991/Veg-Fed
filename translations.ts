@@ -50,7 +50,7 @@ export const translations = {
     downloadExcel: "Download Excel",
     generating: "Generating Report...",
     reportReady: "Your report is ready for download",
-    slogan: "Freshness Redefined: Tarkaari from Bihar",
+    slogan: "हर थाली में बिहारी तरकारी",
     tickerMsg: "Welcome to Tarkaari.in Portal | Direct benefit to farmers, Quality vegetables to consumers | Shop Fresh, Shop Local",
     minister: "Hon'ble Minister, Cooperative Dept.",
     chairman: "Chairman, VEGFED",
@@ -79,7 +79,9 @@ export const translations = {
     projectTracking: "Infrastructure Progress",
     ecommSales: "Tarkaari Direct Store",
     traceability: "Batch Traceability (QR)",
-    registerFarmer: "New Farmer Enrolment"
+    registerFarmer: "New Farmer Enrolment",
+    introTitle: "परिचय-बिहार तरकारी योजना",
+    newsTitle: "समाचार और घोषणाएँ"
   },
   hi: {
     dashboard: "डैशबोर्ड",
@@ -131,7 +133,7 @@ export const translations = {
     downloadExcel: "Excel डाउनलोड करें",
     generating: "रिपोर्ट जेनरेट की जा रही है...",
     reportReady: "आपकी रिपोर्ट डाउनलोड के लिए तैयार है",
-    slogan: "शुद्धता और ताज़गी का नया नाम: तरकारी",
+    slogan: "हर थाली में बिहारी तरकारी",
     tickerMsg: "तरकारी.इन पोर्टल पर आपका स्वागत है | किसानों को सीधा लाभ, उपभोक्ताओं को गुणवत्तापूर्ण सब्जियां | ताज़ा चुनें, स्थानीय चुनें",
     minister: "माननीय मंत्री, सहकारिता विभाग",
     chairman: "अध्यक्ष, वेजफेड",
@@ -160,7 +162,9 @@ export const translations = {
     projectTracking: "बुनियादी ढांचा प्रगति",
     ecommSales: "तरकारी डायरेक्ट स्टोर",
     traceability: "बैच ट्रैसेबिलिटी (QR)",
-    registerFarmer: "नया किसान नामांकन"
+    registerFarmer: "नया किसान नामांकन",
+    introTitle: "परिचय-बिहार तरकारी योजना",
+    newsTitle: "समाचार और घोषणाएँ"
   }
 };
 

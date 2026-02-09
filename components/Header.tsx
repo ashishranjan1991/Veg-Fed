@@ -15,10 +15,12 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user, language, setLanguage, fontSize, setFontSize, theme, setTheme }) => {
   const t = translations[language];
+  const logoUrl = "https://tarkaari.in/assets/img/logo-veg.png";
 
   return (
     <header role="banner" className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 h-16 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0 transition-colors duration-300">
-      <div className="flex items-center space-x-2 shrink-0">
+      <div className="flex items-center space-x-3 shrink-0">
+        <img src={logoUrl} className="w-8 h-8 object-contain" alt="" />
         <span className="text-gray-500 dark:text-slate-400 text-xs md:text-sm font-black truncate max-w-[100px] md:max-w-none uppercase tracking-tighter">
           VEGFED ERP
         </span>

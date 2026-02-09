@@ -13,6 +13,8 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
     firstName: '', lastName: '', mobile: '', dbtNumber: '', bankName: '', accountNumber: '', crops: []
   });
 
+  const logoUrl = "https://tarkaari.in/assets/img/logo-veg.png";
+
   const [farmers] = useState<FarmerRegistration[]>([
     { 
       id: 'APP1001', firstName: 'Ramesh', lastName: 'Mahto', mobile: '9876543210', 
@@ -146,7 +148,7 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
           </div>
         )}
         
-        <i className="fa-solid fa-id-card absolute -bottom-10 -left-10 text-[200px] text-gray-50 dark:text-slate-800/30 -rotate-12 pointer-events-none"></i>
+        <img src={logoUrl} className="absolute -bottom-10 -left-10 w-48 h-48 opacity-10 -rotate-12 pointer-events-none" alt="" />
       </div>
     </div>
   );
@@ -155,8 +157,8 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
     <div className="space-y-8 max-w-4xl mx-auto">
       <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-gray-100 dark:border-slate-800 shadow-sm transition-colors overflow-hidden relative">
         <div className="flex items-center space-x-8 mb-10 relative z-10">
-          <div className="w-32 h-32 bg-emerald-100 dark:bg-emerald-900 rounded-[2.5rem] flex items-center justify-center text-4xl font-black text-emerald-700 dark:text-emerald-300 border-4 border-white dark:border-slate-800 shadow-xl">
-             RM
+          <div className="w-32 h-32 bg-emerald-100 dark:bg-emerald-900 rounded-[2.5rem] flex items-center justify-center text-4xl font-black text-emerald-700 dark:text-emerald-300 border-4 border-white dark:border-slate-800 shadow-xl overflow-hidden">
+             <img src={logoUrl} className="w-full h-full object-contain p-4" alt="" />
           </div>
           <div>
             <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase rounded-lg">Verified Member</span>
@@ -183,7 +185,7 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
               </div>
               <div>
                 <p className="text-[10px] font-black text-gray-400 uppercase">Registered Union</p>
-                <p className="font-bold dark:text-slate-200 text-emerald-600">Patna (Harit)</p>
+                <p className="font-bold dark:text-slate-200 text-emerald-600">Patna (हरित)</p>
               </div>
             </div>
           </div>
@@ -200,13 +202,13 @@ const FarmerModule: React.FC<FarmerModuleProps> = ({ role }) => {
           </div>
         </div>
         
-        <i className="fa-solid fa-wheat-awn absolute -bottom-10 -right-10 text-[250px] text-emerald-50 dark:text-slate-800/30 -rotate-12 pointer-events-none"></i>
+        <img src={logoUrl} className="absolute -bottom-10 -right-10 w-[250px] h-[250px] opacity-10 -rotate-12 pointer-events-none" alt="" />
       </div>
       
       <div className="bg-slate-900 p-8 rounded-[2.5rem] text-white flex items-center justify-between">
          <div className="flex items-center space-x-6">
-            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-3xl text-emerald-400">
-               <i className="fa-solid fa-file-pdf"></i>
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 text-emerald-600">
+               <img src={logoUrl} className="w-full h-full object-contain" alt="" />
             </div>
             <div>
                <h4 className="font-black text-lg">Identity Certificate</h4>
